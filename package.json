@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "author": "",
+  "license": "UNLICENSED",
+  "private": "true",
   "scripts": {
-    "transpile": "tsc",
-    "start": "ts-node-dev src/index.ts",
+    "clean": "rm dist",
+    "build": "tsc",
+    "start": "NODE_PATH=./dist node ./dist/index.js",
+    "local": "ts-node-dev ./src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@hapi/hapi": "^20.0.0",
     "typescript": "^4.0.2"
