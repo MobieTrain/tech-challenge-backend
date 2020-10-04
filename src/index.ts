@@ -1,10 +1,12 @@
 import * as Hapi from '@hapi/hapi'
+import joi from 'joi'
 import { plugins } from './plugins'
 
 const init = async (port='8080') => {
 
   const server = Hapi.server({ port })
 
+  server.validator(joi)
   await server.register(plugins)
   await server.start()
 
