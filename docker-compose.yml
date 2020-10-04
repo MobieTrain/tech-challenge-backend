@@ -6,7 +6,7 @@ services:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    env_file: .env
+    env_file: .env.prod
     ports:
       - '3306:3306'
 
@@ -15,7 +15,7 @@ services:
       context: .
     depends_on:
       - db
-    env_file: .env
+    env_file: .env.prod
     restart: always
     ports:
       - '8080:8080'
