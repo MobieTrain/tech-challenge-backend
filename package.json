@@ -9,8 +9,10 @@
   "scripts": {
     "clean": "rm dist",
     "build": "tsc",
+    "prestart": "npm run db:init",
     "start": "NODE_PATH=./dist node ./dist/index.js",
     "local": "ts-node-dev ./src/index.ts",
+    "db:init": "node dist/db/create-database.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
