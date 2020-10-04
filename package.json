@@ -9,10 +9,11 @@
   "scripts": {
     "clean": "rm dist",
     "build": "tsc",
-    "prestart": "npm run db:init",
+    "prestart": "npm run db:init && npm run db:latest",
     "start": "NODE_PATH=./dist node ./dist/index.js",
     "local": "ts-node-dev ./src/index.ts",
     "db:init": "node dist/db/create-database.js",
+    "db:latest": "npx knex migrate:latest --knexfile dist/knexfile.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
