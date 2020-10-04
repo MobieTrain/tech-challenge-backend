@@ -2,7 +2,9 @@
   "compilerOptions": {
     "module": "CommonJS",
     "noImplicitAny": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "downlevelIteration": true
   },
   "include": ["src/**/*"]
 }
