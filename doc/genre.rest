@@ -1,0 +1,34 @@
+@baseUrl=http://localhost:8080/genre
+@id={{create.response.body.id}}
+
+# @name getAll
+GET {{baseUrl}}
+
+###
+
+# @name create
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "jose-{{$guid}}"
+}
+###
+
+# @name getOne
+GET {{baseUrl}}/{{id}}
+
+###
+
+# @name update
+PUT {{baseUrl}}/{{id}}
+
+{
+  "name": "potato-{{$guid}}"
+}
+###
+
+# @name remove
+DELETE {{baseUrl}}/{{id}}
+
+###
