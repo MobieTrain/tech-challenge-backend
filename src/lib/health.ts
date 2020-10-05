@@ -12,7 +12,7 @@ async function checkDb(): Promise<boolean> {
     await knex.raw('SELECT 1 FROM dual;')
     return true
   } catch(er) {
-    console.log(er)
+    // console.error(er)
     return false
   }
 }

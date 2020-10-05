@@ -5,7 +5,7 @@ module.exports = {
 	transform: 'node_modules/lab-transform-typescript',
 
 	// ...
-	assert: false,
+	assert: '@hapi/code',
 	colors: true,
 	coverage: false,
 	globals: '__core-js_shared__,core,global-symbol-property',
@@ -14,4 +14,5 @@ module.exports = {
 	shuffle: true,
 	timeout: 4000,
 	verbose: true,
+	sourcemaps: true,
 }
