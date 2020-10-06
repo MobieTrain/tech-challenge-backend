@@ -1,4 +1,4 @@
-@baseUrl=http://localhost:8080/genre
+@baseUrl=http://localhost:8080/genres
 @id={{create.response.body.id}}
 
 # @name getAll

@@ -9,7 +9,7 @@ import {
 import joi from 'joi'
 import Boom from '@hapi/boom'
 
-import { find, list, remove, create, update } from '../../lib/genre'
+import { find, list, remove, create, update } from '../../lib/genres'
 
 
 interface ParamsId {
@@ -33,26 +33,26 @@ const validateGenrePayload: RouteOptionsResponseSchema = {
 
 export const genreRoutes: ServerRoute[] = [{
 	method: 'GET',
-	path: '/genre',
+	path: '/genres',
 	handler: _getAll,
 },{
 	method: 'POST',
-	path: '/genre',
+	path: '/genres',
 	handler: _post,
 	options: { validate: validateGenrePayload },
 },{
 	method: 'GET',
-	path: '/genre/{id}',
+	path: '/genres/{id}',
 	handler: _get,
 	options: { validate: validateParamsId },
 },{
 	method: 'PUT',
-	path: '/genre/{id}',
+	path: '/genres/{id}',
 	handler: _put,
 	options: { validate: {...validateParamsId, ...validateGenrePayload} },
 },{
 	method: 'DELETE',
-	path: '/genre/{id}',
+	path: '/genres/{id}',
 	handler: _delete,
 	options: { validate: validateParamsId },
 },]

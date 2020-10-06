@@ -5,7 +5,7 @@ import sinon from 'sinon'
 export const lab = script()
 const { beforeEach, before, after, afterEach, describe, it } = lab
 
-import { list, find, remove, create, update } from './genre'
+import { list, find, remove, create, update } from './genres'
 import { knex } from '../util/knex'
 
 describe('lib', () => describe('genre', () => {
