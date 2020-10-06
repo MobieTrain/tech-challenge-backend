@@ -23,9 +23,9 @@ async function createDatabase() {
   const user = process.env.API_SQL_USER
 
   const knex = Knex(knexConfig)
-  await knex.raw(`CREATE DATABASE IF NOT EXISTS ${schema};`);
-  await knex.raw(`GRANT ALL ON ${schema}.* TO '${user}'@'%';`);
-  await knex.destroy();
+  await knex.raw(`CREATE DATABASE IF NOT EXISTS ${schema};`)
+  await knex.raw(`GRANT ALL ON ${schema}.* TO '${user}'@'%';`)
+  await knex.destroy()
 }
 
 process.on('unhandledRejection', (err) => {
@@ -34,4 +34,4 @@ process.on('unhandledRejection', (err) => {
   process.exit(1)
 })
 
-createDatabase();
+createDatabase()

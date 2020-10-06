@@ -9,16 +9,16 @@ import { check } from './health'
 import { knex } from '../util/knex'
 
 describe('lib', () => describe('health', () => {
-	const sandbox = Object.freeze(sinon.createSandbox())
+  const sandbox = Object.freeze(sinon.createSandbox())
 
-	before(({context}: { readonly context: Record<string, any> }) => {
-		context.stub = {
+  before(({context}: { readonly context: Record<string, any> }) => {
+    context.stub = {
       knex_raw: sandbox.stub(knex, 'raw'),
       console: sandbox.stub(console, 'error'),
-		}
+    }
   })
 
-	beforeEach(({context}: { readonly context: Record<string, any> }) => {
+  beforeEach(({context}: { readonly context: Record<string, any> }) => {
     context.stub.knex_raw.resolves()
   })
 

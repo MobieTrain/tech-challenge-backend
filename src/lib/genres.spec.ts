@@ -9,10 +9,10 @@ import { list, find, remove, create, update } from './genres'
 import { knex } from '../util/knex'
 
 describe('lib', () => describe('genre', () => {
-	const sandbox = Object.freeze(sinon.createSandbox())
+  const sandbox = Object.freeze(sinon.createSandbox())
 
-	before(({context}: { readonly context: Record<string, any> }) => {
-		context.stub = {
+  before(({context}: { readonly context: Record<string, any> }) => {
+    context.stub = {
       knex_from: sandbox.stub(knex, 'from'),
       knex_select: sandbox.stub(knex, 'select'),
       knex_where: sandbox.stub(knex, 'where'),
@@ -25,7 +25,7 @@ describe('lib', () => describe('genre', () => {
     }
   })
 
-	beforeEach(({context}: { readonly context: Record<string, any> }) => {
+  beforeEach(({context}: { readonly context: Record<string, any> }) => {
     context.stub.knex_from.returnsThis()
     context.stub.knex_select.returnsThis()
     context.stub.knex_where.returnsThis()
@@ -75,14 +75,14 @@ describe('lib', () => describe('genre', () => {
     })
 
     ; [0, 1].forEach( rows =>
-    it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
-      context.stub.knex_delete.resolves(rows)
-      const anyId = 123
+      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
+        context.stub.knex_delete.resolves(rows)
+        const anyId = 123
 
-      const result = await remove(anyId)
-      expect(result).to.be.boolean()
-      expect(result).equals(!!rows)
-    }))
+        const result = await remove(anyId)
+        expect(result).to.be.boolean()
+        expect(result).equals(!!rows)
+      }))
 
   })
 
@@ -100,15 +100,15 @@ describe('lib', () => describe('genre', () => {
     })
 
     ; [0, 1].forEach( rows =>
-    it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
-      const anyId = 123
-      const anyName = 'any-name'
-      context.stub.knex_update.resolves(rows)
+      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
+        const anyId = 123
+        const anyName = 'any-name'
+        context.stub.knex_update.resolves(rows)
 
-      const result = await update(anyId, anyName)
-      expect(result).to.be.boolean()
-      expect(result).equals(!!rows)
-    }))
+        const result = await update(anyId, anyName)
+        expect(result).to.be.boolean()
+        expect(result).equals(!!rows)
+      }))
 
   })
 
@@ -125,14 +125,14 @@ describe('lib', () => describe('genre', () => {
     })
 
     ; [0, 1].forEach( rows =>
-    it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
-      context.stub.knex_delete.resolves(rows)
-      const anyId = 123
+      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
+        context.stub.knex_delete.resolves(rows)
+        const anyId = 123
 
-      const result = await remove(anyId)
-      expect(result).to.be.boolean()
-      expect(result).equals(!!rows)
-    }))
+        const result = await remove(anyId)
+        expect(result).to.be.boolean()
+        expect(result).equals(!!rows)
+      }))
 
   })
 

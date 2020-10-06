@@ -9,8 +9,8 @@ if(!process.env.API_SQL_USER)     throw new Error('Missing ENV variable `API_SQL
 if(!process.env.API_SQL_PASSWORD) throw new Error('Missing ENV variable `API_SQL_PASSWORD`.')
 
 const knexConfig: Config = {
-	client: 'mysql',
-	connection: {
+  client: 'mysql',
+  connection: {
     host: process.env.API_SQL_HOST,
     port: parseInt(process.env.API_SQL_PORT, 10),
     database: process.env.API_SQL_SCHEMA,

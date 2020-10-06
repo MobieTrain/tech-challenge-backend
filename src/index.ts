@@ -1,7 +1,7 @@
 import * as Hapi from '@hapi/hapi'
 import { plugins } from './plugins'
 
-const init = async (port='8080') => {
+const init = async (port = '8080') => {
 
   const server = Hapi.server({ port })
 
