@@ -9,7 +9,7 @@ import {
 import joi from 'joi'
 import Boom from '@hapi/boom'
 
-import { find, list, remove, create, update } from '../../lib/genres'
+import * as genres from '../../lib/genres'
 
 
 interface ParamsId {
@@ -59,13 +59,13 @@ export const genreRoutes: ServerRoute[] = [{
 
 
 async function _getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-	return list()
+	return genres.list()
 }
 
 async function _get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
 	const { id } = (req.params as ParamsId)
 
-	const found = await find(id)
+	const found = await genres.find(id)
 	return found || Boom.notFound()
 }
 
@@ -73,7 +73,7 @@ async function _post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Li
 	const { name } = (req.payload as GenrePayload)
 
 	try {
-		const id = await create(name)
+		const id = await genres.create(name)
 		const result = {
 			id,
 			path: `${req.route.path}/${id}`
@@ -91,7 +91,7 @@ async function _put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
 	const { name } = (req.payload as GenrePayload)
 
 	try {
-		return await update(id, name) ? h.response().code(204) : Boom.notFound()
+		return await genres.update(id, name) ? h.response().code(204) : Boom.notFound()
 	}
 	catch(er){
 		if(er['code'] = 'ER_DUP_ENTRY') return Boom.conflict()
@@ -103,5 +103,5 @@ async function _put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
 async function _delete(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
 	const { id } = (req.params as ParamsId)
 
-	return await remove(id) ? h.response().code(204) : Boom.notFound()
+	return await genres.remove(id) ? h.response().code(204) : Boom.notFound()
 }
