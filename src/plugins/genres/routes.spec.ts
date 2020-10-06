@@ -1,6 +1,6 @@
 import { script } from '@hapi/lab'
 import { expect } from '@hapi/code'
-import sinon, { resetHistory } from 'sinon'
+import sinon from 'sinon'
 
 export const lab = script()
 const { beforeEach, before, after, afterEach, describe, it } = lab
@@ -12,10 +12,11 @@ import * as lib from '../../lib/genres'
 describe('plugin', () => describe('genre', () => {
   const sandbox = Object.freeze(sinon.createSandbox())
 
-  const isContext = (value: Record<string, any>): value is Context => {
-    if(!value) return false
-    if(!value.server) return false
-    if(!value.stub) return false
+  const isContext = (value: unknown): value is Context => {
+    if(!value || typeof value !== 'object') return false
+    const safe = value as Record<string, unknown>
+    if(!safe.server) return false
+    if(!safe.stub) return false
     return true
   }
   interface Context {

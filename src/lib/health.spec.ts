@@ -11,14 +11,29 @@ import { knex } from '../util/knex'
 describe('lib', () => describe('health', () => {
   const sandbox = Object.freeze(sinon.createSandbox())
 
-  before(({context}: { readonly context: Record<string, any> }) => {
+  const isContext = (value: unknown): value is Context => {
+    if(!value || typeof value !== 'object') return false
+    const safe = value as Record<string, unknown>
+    if(!safe.server) return false
+    if(!safe.stub) return false
+    return true
+  }
+  interface Context {
+    stub: Record<string, sinon.SinonStub>
+  }
+  interface Flags extends script.Flags {
+    readonly context: Partial<Context>
+  }
+
+  before(({context}: Flags) => {
     context.stub = {
       knex_raw: sandbox.stub(knex, 'raw'),
       console: sandbox.stub(console, 'error'),
     }
   })
 
-  beforeEach(({context}: { readonly context: Record<string, any> }) => {
+  beforeEach(({context}: Flags) => {
+    if(!isContext(context)) throw TypeError()
     context.stub.knex_raw.resolves()
   })
 
@@ -35,7 +50,8 @@ describe('lib', () => describe('health', () => {
     expect<Record<string, boolean>>(res).contains({db: true})
   })
 
-  it('returns false as status for db when error', async ({context}: { readonly context: Record<string, any> }) => {
+  it('returns false as status for db when error', async ({context}: Flags) => {
+    if(!isContext(context)) throw TypeError()
     context.stub.knex_raw.rejects('any error')
 
     const res = await check()

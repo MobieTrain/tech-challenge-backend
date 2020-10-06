@@ -11,7 +11,21 @@ import { knex } from '../util/knex'
 describe('lib', () => describe('genre', () => {
   const sandbox = Object.freeze(sinon.createSandbox())
 
-  before(({context}: { readonly context: Record<string, any> }) => {
+  const isContext = (value: unknown): value is Context => {
+    if(!value || typeof value !== 'object') return false
+    const safe = value as Record<string, unknown>
+    if(!safe.server) return false
+    if(!safe.stub) return false
+    return true
+  }
+  interface Context {
+    stub: Record<string, sinon.SinonStub>
+  }
+  interface Flags extends script.Flags {
+    readonly context: Partial<Context>
+  }
+
+  before(({context}: Flags) => {
     context.stub = {
       knex_from: sandbox.stub(knex, 'from'),
       knex_select: sandbox.stub(knex, 'select'),
@@ -25,7 +39,9 @@ describe('lib', () => describe('genre', () => {
     }
   })
 
-  beforeEach(({context}: { readonly context: Record<string, any> }) => {
+  beforeEach(({context}: Flags) => {
+    if(!isContext(context)) throw TypeError()
+
     context.stub.knex_from.returnsThis()
     context.stub.knex_select.returnsThis()
     context.stub.knex_where.returnsThis()
@@ -41,7 +57,9 @@ describe('lib', () => describe('genre', () => {
 
   describe('list', () => {
 
-    it('returns rows from table `genre`', async ({context}: { readonly context: Record<string, any> }) => {
+    it('returns rows from table `genre`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
+
       await list()
       sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'genre')
       sinon.assert.calledOnce(context.stub.knex_select)
@@ -51,7 +69,8 @@ describe('lib', () => describe('genre', () => {
 
   describe('find', () => {
 
-    it('returns one row from table `genre`, by `id`', async ({context}: { readonly context: Record<string, any> }) => {
+    it('returns one row from table `genre`, by `id`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
       const anyId = 123
 
       await find(anyId)
@@ -64,7 +83,8 @@ describe('lib', () => describe('genre', () => {
 
   describe('remove', () => {
 
-    it('removes one row from table `genre`, by `id`', async ({context}: { readonly context: Record<string, any> }) => {
+    it('removes one row from table `genre`, by `id`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
       const anyId = 123
       context.stub.knex_delete.resolves()
 
@@ -75,7 +95,8 @@ describe('lib', () => describe('genre', () => {
     })
 
     ; [0, 1].forEach( rows =>
-      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
+      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: Flags) => {
+        if(!isContext(context)) throw TypeError()
         context.stub.knex_delete.resolves(rows)
         const anyId = 123
 
@@ -88,8 +109,9 @@ describe('lib', () => describe('genre', () => {
 
   describe('update', () => {
 
-    it('updates one row from table `genre`, by `id`', async ({context}: { readonly context: Record<string, any> }) => {
+    it('updates one row from table `genre`, by `id`', async ({context}: Flags) => {
       const anyId = 123
+      if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       context.stub.knex_update.resolves()
 
@@ -100,7 +122,8 @@ describe('lib', () => describe('genre', () => {
     })
 
     ; [0, 1].forEach( rows =>
-      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
+      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: Flags) => {
+        if(!isContext(context)) throw TypeError()
         const anyId = 123
         const anyName = 'any-name'
         context.stub.knex_update.resolves(rows)
@@ -114,7 +137,8 @@ describe('lib', () => describe('genre', () => {
 
   describe('remove', () => {
 
-    it('removes one row from table `genre`, by `id`', async ({context}: { readonly context: Record<string, any> }) => {
+    it('removes one row from table `genre`, by `id`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
       const anyId = 123
       context.stub.knex_delete.resolves()
 
@@ -125,7 +149,8 @@ describe('lib', () => describe('genre', () => {
     })
 
     ; [0, 1].forEach( rows =>
-      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: { readonly context: Record<string, any> }) => {
+      it(`returns ${!!rows} when (${rows}) row is found and deleted`, async ({context}: Flags) => {
+        if(!isContext(context)) throw TypeError()
         context.stub.knex_delete.resolves(rows)
         const anyId = 123
 
@@ -138,7 +163,8 @@ describe('lib', () => describe('genre', () => {
 
   describe('create', () => {
 
-    it('insert one row into table `genre`', async ({context}: { readonly context: Record<string, any> }) => {
+    it('insert one row into table `genre`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       context.stub.knex_insert.resolves([])
 
@@ -147,7 +173,8 @@ describe('lib', () => describe('genre', () => {
       sinon.assert.calledOnceWithExactly(context.stub.knex_insert, { name: anyName })
     })
 
-    it('returns the `id` created for the new row', async ({context}: { readonly context: Record<string, any> }) => {
+    it('returns the `id` created for the new row', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       const anyId = 123
       context.stub.knex_insert.resolves([anyId])

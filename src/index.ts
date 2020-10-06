@@ -20,6 +20,6 @@ process.on('unhandledRejection', (err) => {
 Object.keys(process.env)
   .filter(it => it.startsWith('API_'))
   .sort()
-  .forEach(it => console.debug(`${it}=${process.env[it]}`))
+  .forEach(it => console.debug(`${it}=${process.env[it] || '*empty*'}`))
 
-init(process.env.MT_PORT)
+void init(process.env.MT_PORT)
