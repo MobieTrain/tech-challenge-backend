@@ -1,5 +1,5 @@
 import { ServerRoute, ResponseToolkit, Lifecycle } from '@hapi/hapi'
-import { check } from '../../lib/health'
+import * as health from '../../lib/health'
 
 export const healthRoutes: ServerRoute[] = [{
 	method: 'GET',
@@ -8,5 +8,5 @@ export const healthRoutes: ServerRoute[] = [{
 },]
 
 async function _get(_request: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-	return check()
+	return health.check()
 }
