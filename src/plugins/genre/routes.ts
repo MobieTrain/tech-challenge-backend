@@ -16,18 +16,18 @@ interface ParamsId {
 	id: number
 }
 const validateParamsId: RouteOptionsValidate = {
-	params: {
+	params: joi.object({
 		id: joi.number().required().min(1),
-	}
+	})
 }
 
 interface GenrePayload {
 	name: string
 }
 const validateGenrePayload: RouteOptionsResponseSchema = {
-	payload: {
+	payload: joi.object({
 		name: joi.string().required(),
-	}
+	})
 }
 
 
