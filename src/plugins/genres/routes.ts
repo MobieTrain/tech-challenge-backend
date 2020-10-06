@@ -10,6 +10,7 @@ import joi from 'joi'
 import Boom from '@hapi/boom'
 
 import * as genres from '../../lib/genres'
+import { isHasCode } from '../../util/types'
 
 
 interface ParamsId {
@@ -80,9 +81,9 @@ async function _post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Li
     }
     return h.response(result).code(201)
   }
-  catch(er){
-    if(er['code'] = 'ER_DUP_ENTRY') return Boom.conflict()
-    else throw er
+  catch(er: unknown){
+    if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
+    return Boom.conflict()
   }
 }
 
@@ -93,9 +94,9 @@ async function _put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
   try {
     return await genres.update(id, name) ? h.response().code(204) : Boom.notFound()
   }
-  catch(er){
-    if(er['code'] = 'ER_DUP_ENTRY') return Boom.conflict()
-    else throw er
+  catch(er: unknown){
+    if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
+    return Boom.conflict()
   }
 
 }
