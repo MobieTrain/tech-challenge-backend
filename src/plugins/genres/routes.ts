@@ -13,7 +13,7 @@ import * as genres from '../../lib/genres'
 
 
 interface ParamsId {
-	id: number
+  id: number
 }
 const validateParamsId: RouteOptionsValidate = {
   params: joi.object({
@@ -22,7 +22,7 @@ const validateParamsId: RouteOptionsValidate = {
 }
 
 interface GenrePayload {
-	name: string
+  name: string
 }
 const validateGenrePayload: RouteOptionsResponseSchema = {
   payload: joi.object({
