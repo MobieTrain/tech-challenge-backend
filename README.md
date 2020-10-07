@@ -11,6 +11,7 @@ This tech exercise will challenge your NodeJS skills, as well as your flexibilit
   - Docker
   - Docker Compose
   - MySQL 5.7
+  - We recommend VS Code with the REST Client plugin to use the documentation provided.
 
   ### Installation
 
@@ -19,13 +20,15 @@ This tech exercise will challenge your NodeJS skills, as well as your flexibilit
   ### Compiling
 
   ```bash
-  npm run transpile
+  npm run build
   ```
 
   ### Running
 
   ```bash
-  npm start
+  # development
+  docker-compose up db
+  npm run local # keep in mind that the env vars are in .env.dev
   ```
 </details>
 
@@ -34,7 +37,9 @@ This tech exercise will challenge your NodeJS skills, as well as your flexibilit
 
 You'll work on a backend to support a movie gallery web application. This application should allow its users to view and manage movies, actors, and genres, as well as generate some reports to compare and rank actors.
 
-To get you started, you'll find an already developed plugin: `/genres`
+To get you started, you'll find an already developed plugin: `/genres`.
+
+*Note: All the database migrations needed should follow the [Knex Migrations](http://knexjs.org/#Migrations) and can be found in `./src/db/migrations`*
 
 ## Issues
 
