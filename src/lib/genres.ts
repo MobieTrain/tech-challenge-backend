@@ -1,15 +1,15 @@
 import { knex } from '../util/knex'
 
-export interface genre {
+export interface Genre {
   id: number
   name: string
 }
 
-export function list(): Promise<genre[]> {
+export function list(): Promise<Genre[]> {
   return knex.from('genre').select()
 }
 
-export function find(id: number): Promise<genre> {
+export function find(id: number): Promise<Genre> {
   return knex.from('genre').where({ id }).first()
 }
 
