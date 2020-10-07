@@ -14,7 +14,7 @@ describe('plugin', () => describe('genre', () => {
 
   const isContext = (value: unknown): value is Context => {
     if(!value || typeof value !== 'object') return false
-    const safe = value as Record<string, unknown>
+    const safe = value as Partial<Context>
     if(!safe.server) return false
     if(!safe.stub) return false
     return true

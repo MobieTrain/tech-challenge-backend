@@ -13,8 +13,7 @@ describe('lib', () => describe('genre', () => {
 
   const isContext = (value: unknown): value is Context => {
     if(!value || typeof value !== 'object') return false
-    const safe = value as Record<string, unknown>
-    if(!safe.server) return false
+    const safe = value as Partial<Context>
     if(!safe.stub) return false
     return true
   }
