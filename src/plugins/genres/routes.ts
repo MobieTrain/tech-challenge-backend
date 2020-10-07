@@ -22,10 +22,10 @@ const validateParamsId: RouteOptionsValidate = {
   })
 }
 
-interface GenrePayload {
+interface PayloadGenre {
   name: string
 }
-const validateGenrePayload: RouteOptionsResponseSchema = {
+const validatePayloadGenre: RouteOptionsResponseSchema = {
   payload: joi.object({
     name: joi.string().required(),
   })
@@ -35,43 +35,43 @@ const validateGenrePayload: RouteOptionsResponseSchema = {
 export const genreRoutes: ServerRoute[] = [{
   method: 'GET',
   path: '/genres',
-  handler: _getAll,
+  handler: getAll,
 },{
   method: 'POST',
   path: '/genres',
-  handler: _post,
-  options: { validate: validateGenrePayload },
+  handler: post,
+  options: { validate: validatePayloadGenre },
 },{
   method: 'GET',
   path: '/genres/{id}',
-  handler: _get,
+  handler: get,
   options: { validate: validateParamsId },
 },{
   method: 'PUT',
   path: '/genres/{id}',
-  handler: _put,
-  options: { validate: {...validateParamsId, ...validateGenrePayload} },
+  handler: put,
+  options: { validate: {...validateParamsId, ...validatePayloadGenre} },
 },{
   method: 'DELETE',
   path: '/genres/{id}',
-  handler: _delete,
+  handler: remove,
   options: { validate: validateParamsId },
 },]
 
 
-async function _getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   return genres.list()
 }
 
-async function _get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+async function get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
 
   const found = await genres.find(id)
   return found || Boom.notFound()
 }
 
-async function _post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const { name } = (req.payload as GenrePayload)
+async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { name } = (req.payload as PayloadGenre)
 
   try {
     const id = await genres.create(name)
@@ -87,9 +87,9 @@ async function _post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Li
   }
 }
 
-async function _put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
-  const { name } = (req.payload as GenrePayload)
+  const { name } = (req.payload as PayloadGenre)
 
   try {
     return await genres.update(id, name) ? h.response().code(204) : Boom.notFound()
@@ -98,10 +98,9 @@ async function _put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
     return Boom.conflict()
   }
-
 }
 
-async function _delete(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
 
   return await genres.remove(id) ? h.response().code(204) : Boom.notFound()
