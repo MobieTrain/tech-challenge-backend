@@ -4,7 +4,7 @@ export interface Movie {
   id: number
   name: string
   synopsis?: string
-  released_at: Date
+  released_at: string
   runtime: number
   genre_id: number
 }
