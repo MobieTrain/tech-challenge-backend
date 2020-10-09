@@ -11,12 +11,12 @@
     "build": "tsc",
     "prestart": "npm run db:init && npm run db:latest",
     "start": "NODE_PATH=./dist node ./dist/index.js",
-    "local": "ts-node-dev --inspect=7000 ./src/index.ts",
-    "db:init": "node dist/db/create-database.js",
-    "db:latest": "npx knex migrate:latest --knexfile dist/knexfile.js",
+    "local": "source .env-local && ts-node-dev --inspect=7000 ./src/index.ts",
+    "db:init": "source .env-local && node ./dist/db/create-database.js",
+    "db:latest": "source .env-local && npx knex migrate:latest --knexfile dist/knexfile.js",
     "lint:tdd": "nodemon --watch ./src --ext ts  --exec npm run lint",
     "lint": "eslint . --ext .ts",
-    "test:tdd": "nodemon --delay 0.01 --inspect=7001 --watch ./src --ext ts,json --exec npm test",
+    "test:tdd": "source .env-local && nodemon --delay 0.01 --inspect=7001 --watch ./src --ext ts,json --exec npm test",
     "test": "lab ./src --pattern '\\.spec'"
   },
   "dependencies": {

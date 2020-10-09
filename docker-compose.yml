@@ -6,7 +6,10 @@ services:
     image: mysql:5.7
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    env_file: .env.prod
+    environment:
+      MYSQL_USER: 'mysql_user'
+      MYSQL_PASSWORD: 'mysql_password'
+      MYSQL_ROOT_PASSWORD: 'mysql_root_password'
     ports:
       - '3306:3306'
 
