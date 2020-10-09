@@ -91,6 +91,12 @@ First start a database instance by running `$ docker-compose up db`. After that,
 
 *Attention: tests are considered part of code and responsibility of the developer.* Unit tests are provided alongside code, on *spec.ts* files. End to end tests are provided on *docs*. We expect the new code will also contain its own new test cases.
 
+#### New migrations
+
+Example:
+
+`$ knex migrate:make cast -x ts --migrations-directory ./src/db/migrations`
+
 ### Changes on database
 All changes to the database should be made using [Knex Migrations](http://knexjs.org/#Migrations). There is already one migration in *./src/db/migrations*. To clear the database to its original state, run `$ docker-compose rm db`.
 
