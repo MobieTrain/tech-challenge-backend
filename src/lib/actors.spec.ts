@@ -5,7 +5,7 @@ import sinon from 'sinon'
 export const lab = script()
 const { beforeEach, before, after, afterEach, describe, it } = lab
 
-import { list, find, remove, create, update } from './actors'
+import { list, find, remove, create, update, characters } from './actors'
 import { knex } from '../util/knex'
 
 describe('lib', () => describe('actor', () => {
@@ -64,6 +64,15 @@ describe('lib', () => describe('actor', () => {
       sinon.assert.calledOnce(context.stub.knex_select)
     })
 
+    it('returns characters of a given `actor`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const anyId = 123
+
+      await characters(anyId)
+      sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'cast')
+      sinon.assert.calledOnce(context.stub.knex_select)
+    })
+
   })
 
   describe('find', () => {
@@ -119,7 +128,7 @@ describe('lib', () => describe('actor', () => {
       await update(anyId, anyName, anyBio, anyBornAt)
       sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'actor')
       sinon.assert.calledOnceWithExactly(context.stub.knex_where, { id: anyId })
-      sinon.assert.calledOnceWithExactly(context.stub.knex_update, { name: anyName, bio: anyBio, bornAt: anyBornAt })
+      sinon.assert.calledOnceWithExactly(context.stub.knex_update, { name: anyName, bio: anyBio, born_at: anyBornAt })
     })
 
     ; [0, 1].forEach( rows =>
@@ -175,7 +184,7 @@ describe('lib', () => describe('actor', () => {
 
       await create(anyName, anyBio, anyBornAt)
       sinon.assert.calledOnceWithExactly(context.stub.knex_into, 'actor')
-      sinon.assert.calledOnceWithExactly(context.stub.knex_insert, { name: anyName, bio: anyBio, bornAt: anyBornAt })
+      sinon.assert.calledOnceWithExactly(context.stub.knex_insert, { name: anyName, bio: anyBio, born_at: anyBornAt })
     })
 
     it('returns the `id` created for the new row', async ({context}: Flags) => {

@@ -13,7 +13,7 @@
     "start": "NODE_PATH=./dist node ./dist/index.js",
     "local": "source .env-local && ts-node-dev --inspect=7000 ./src/index.ts",
     "db:init": "source .env-local && node ./dist/db/create-database.js",
-    "db:latest": "source .env-local && npx knex migrate:latest --knexfile dist/knexfile.js",
+    "db:latest": "source .env-local && npm run build && npx knex migrate:latest --knexfile dist/knexfile.js",
     "db:refresh": "source .env-local && npx knex migrate:rollback --knexfile dist/knexfile.js",
     "lint:tdd": "nodemon --watch ./src --ext ts  --exec npm run lint",
     "lint": "eslint . --ext .ts",
