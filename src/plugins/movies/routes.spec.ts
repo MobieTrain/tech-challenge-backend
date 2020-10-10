@@ -6,11 +6,19 @@ export const lab = script()
 const { beforeEach, before, after, afterEach, describe, it } = lab
 
 import * as Hapi from '@hapi/hapi'
-import { actor as plugin } from './index'
-import * as lib from '../../lib/actors'
+import { movie as plugin } from './index'
+import * as lib from '../../lib/movies'
 
-describe('plugin', () => describe('actor', () => {
+describe('plugin', () => describe('movie', () => {
   const sandbox = Object.freeze(sinon.createSandbox())
+
+  const basePayload = {
+    name: 'some-name',
+    synopsis: 'some-synopsis',
+    released_at: new Date('1997-05-13'),
+    runtime: 90,
+    genre_id: 1
+  }
 
   const isContext = (value: unknown): value is Context => {
     if(!value || typeof value !== 'object') return false
@@ -56,10 +64,10 @@ describe('plugin', () => describe('actor', () => {
   afterEach(() => sandbox.resetHistory())
   after(() => sandbox.restore())
 
-  describe('GET /actors', () => {
-    const [method, url] = ['GET', '/actors']
+  describe('GET /movies', () => {
+    const [method, url] = ['GET', '/movies']
 
-    it('returns all actors', async ({ context }: Flags) => {
+    it('returns all movies', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
       const opts: Hapi.ServerInjectOptions = { method, url }
       const anyResult = [{'any': 'result'}]
@@ -74,8 +82,8 @@ describe('plugin', () => describe('actor', () => {
 
   })
 
-  describe('POST /actors', () => {
-    const [method, url] = ['POST', '/actors']
+  describe('POST /movies', () => {
+    const [method, url] = ['POST', '/movies']
 
     it('validates payload is not empty', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
@@ -86,7 +94,7 @@ describe('plugin', () => describe('actor', () => {
       expect(response.statusCode).equals(400)
     })
 
-    it('validates payload matches `actor`', async ({ context }: Flags) => {
+    it('validates payload matches `movie`', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
       const payload = {'some': 'object'}
       const opts: Hapi.ServerInjectOptions = { method, url, payload}
@@ -97,7 +105,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns HTTP 409 when given `name` already exists', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
-      const payload = {'name': 'repeated-name', 'bio': 'any-bio', 'born_at': new Date('1997-05-13')}
+      const payload = Object.assign(basePayload, { name: 'repeated-name' })
       const opts: Hapi.ServerInjectOptions = { method, url, payload }
       context.stub.lib_create.rejects({ code: 'ER_DUP_ENTRY'})
 
@@ -107,7 +115,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns HTTP 201, with the `id` and `path` to the row created', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
-      const payload = {'name': 'any-name', 'bio': 'any-bio', 'born_at': new Date('1997-05-13')}
+      const payload = basePayload
       const opts: Hapi.ServerInjectOptions = { method, url, payload }
       const anyResult = 123
       context.stub.lib_create.resolves(anyResult)
@@ -115,18 +123,18 @@ describe('plugin', () => describe('actor', () => {
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(201)
 
-      sinon.assert.calledOnceWithExactly(context.stub.lib_create, payload.name, payload.bio, payload.born_at)
+      sinon.assert.calledOnceWithExactly(context.stub.lib_create, payload.name, payload.synopsis, payload.released_at, payload.runtime, payload.genre_id)
       expect(response.result).equals({
         id: anyResult,
-        path: `/actors/${anyResult}`
+        path: `/movies/${anyResult}`
       })
     })
 
   })
 
-  describe('GET /actors/:id', () => {
+  describe('GET /movies/:id', () => {
     const paramId = 123
-    const [method, url] = ['GET', `/actors/${paramId}`]
+    const [method, url] = ['GET', `/movies/${paramId}`]
 
     it('validates :id is numeric', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
@@ -145,7 +153,7 @@ describe('plugin', () => describe('actor', () => {
       expect(response.statusCode).equals(404)
     })
 
-    it('returns one actor', async ({ context }: Flags) => {
+    it('returns one movie', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
       const opts: Hapi.ServerInjectOptions = { method, url }
       const anyResult = {'any': 'result'}
@@ -160,9 +168,9 @@ describe('plugin', () => describe('actor', () => {
 
   })
 
-  describe('PUT /actors/:id', () => {
+  describe('PUT /movies/:id', () => {
     const paramId = 123
-    const [method, url, payload] = ['PUT', `/actors/${paramId}`, {'name': 'any-name', 'bio': 'any-bio', 'born_at': new Date('1997-05-13')}]
+    const [method, url, payload] = ['PUT', `/movies/${paramId}`, basePayload]
 
     it('validates payload is not empty', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
@@ -172,7 +180,7 @@ describe('plugin', () => describe('actor', () => {
       expect(response.statusCode).equals(400)
     })
 
-    it('validates payload matches `actor`', async ({ context }: Flags) => {
+    it('validates payload matches `movie`', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()
       const opts: Hapi.ServerInjectOptions = { method, url, payload: {'unexpected': 'object'}}
 
@@ -207,15 +215,15 @@ describe('plugin', () => describe('actor', () => {
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(204)
 
-      sinon.assert.calledOnceWithExactly(context.stub.lib_update, paramId, payload.name, payload.bio, payload.born_at)
+      sinon.assert.calledOnceWithExactly(context.stub.lib_update, paramId, payload.name, payload.synopsis, payload.released_at, payload.runtime, payload.genre_id)
       expect(response.result).to.be.null()
     })
 
   })
 
-  describe('DELETE /actors/:id', () => {
+  describe('DELETE /movies/:id', () => {
     const paramId = 123
-    const [method, url] = ['DELETE', `/actors/${paramId}`]
+    const [method, url] = ['DELETE', `/movies/${paramId}`]
 
     it('validates :id is numeric', async ({ context }: Flags) => {
       if(!isContext(context)) throw TypeError()

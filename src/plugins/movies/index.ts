@@ -1,9 +1,9 @@
 import { Server, Plugin } from '@hapi/hapi'
-import { actorRoutes } from './routes'
+import { movieRoutes } from './routes'
 
-export const actor: Plugin<void> = {
-  name: 'actor',
+export const movie: Plugin<void> = {
+  name: 'movie',
   version: '1.0.0',
   multiple: false,
-  register: (server: Server, _options: void) => server.route(actorRoutes)
+  register: (server: Server, _options: void) => server.route(movieRoutes)
 }

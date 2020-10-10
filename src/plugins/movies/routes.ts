@@ -9,7 +9,7 @@ import {
 import joi from 'joi'
 import Boom from '@hapi/boom'
 
-import * as actors from '../../lib/actors'
+import * as movies from '../../lib/movies'
 import { isHasCode } from '../../util/types'
 
 
@@ -22,63 +22,67 @@ const validateParamsId: RouteOptionsValidate = {
   })
 }
 
-interface PayloadActor {
+interface PayloadMovie {
   name: string
-  bio: string
-  born_at: Date
+  synopsis: string
+  released_at: Date
+  runtime: number
+  genre_id: number
 }
-const validatePayloadActor: RouteOptionsResponseSchema = {
+const validatePayloadMovie: RouteOptionsResponseSchema = {
   payload: joi.object({
-    name: joi.string().required(),
-    bio: joi.string().required(),
-    born_at: joi.date().required(),
+    name: joi.string(),
+    synopsis: joi.string(),
+    released_at: joi.date().required(),
+    runtime: joi.number().required(),
+    genre_id: joi.number()
   })
 }
 
 
-export const actorRoutes: ServerRoute[] = [{
+export const movieRoutes: ServerRoute[] = [{
   method: 'GET',
-  path: '/actors',
+  path: '/movies',
   handler: getAll,
 },{
   method: 'POST',
-  path: '/actors',
+  path: '/movies',
   handler: post,
-  options: { validate: validatePayloadActor },
+  options: { validate: validatePayloadMovie },
 },{
   method: 'GET',
-  path: '/actors/{id}',
+  path: '/movies/{id}',
   handler: get,
   options: { validate: validateParamsId },
 },{
   method: 'PUT',
-  path: '/actors/{id}',
+  path: '/movies/{id}',
   handler: put,
-  options: { validate: {...validateParamsId, ...validatePayloadActor} },
+  options: { validate: {...validateParamsId, ...validatePayloadMovie} },
 },{
   method: 'DELETE',
-  path: '/actors/{id}',
+  path: '/movies/{id}',
   handler: remove,
   options: { validate: validateParamsId },
 },]
 
 
 async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  return actors.list()
+  return movies.list()
 }
 
 async function get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
 
-  const found = await actors.find(id)
+  const found = await movies.find(id)
   return found || Boom.notFound()
 }
 
 async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const { name, bio, born_at } = (req.payload as PayloadActor)
+  const { name, synopsis, released_at, runtime, genre_id } = (req.payload as PayloadMovie)
 
   try {
-    const id = await actors.create(name, bio, born_at)
+    const id = await movies.create(name, synopsis, released_at, runtime, genre_id)
     const result = {
       id,
       path: `${req.route.path}/${id}`
@@ -93,10 +97,10 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
 
 async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
-  const { name, bio, born_at } = (req.payload as PayloadActor)
+  const { name, synopsis, released_at, runtime, genre_id } = (req.payload as PayloadMovie)
 
   try {
-    return await actors.update(id, name, bio, born_at) ? h.response().code(204) : Boom.notFound()
+    return await movies.update(id, name, synopsis, released_at, runtime, genre_id) ? h.response().code(204) : Boom.notFound()
   }
   catch(er: unknown){
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
@@ -107,5 +111,5 @@ async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Life
 async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
 
-  return await actors.remove(id) ? h.response().code(204) : Boom.notFound()
+  return await movies.remove(id) ? h.response().code(204) : Boom.notFound()
 }
