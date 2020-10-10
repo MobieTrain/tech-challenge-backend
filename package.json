@@ -7,7 +7,7 @@
   "license": "UNLICENSED",
   "private": "true",
   "scripts": {
-    "clean": "rm dist",
+    "clean": "rm -rf dist",
     "build": "tsc",
     "prestart": "npm run db:init && npm run db:latest",
     "start": "NODE_PATH=./dist node ./dist/index.js",
