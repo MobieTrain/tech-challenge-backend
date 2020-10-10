@@ -41,6 +41,6 @@ export async function update(id: number, name: string, bio: string, bornAt: Date
  * Return a list of characters given an actor
  * @param actorId
  */
-export function characters(actorId: number): Promise<Actor[]> {
+export function characters(actorId: number): Promise<string[]> {
   return knex.from('cast').where('actor_id', actorId).select('character_name')
 }

@@ -60,6 +60,11 @@ export const actorRoutes: ServerRoute[] = [{
   path: '/actors/{id}',
   handler: remove,
   options: { validate: validateParamsId },
+},{
+  method: 'GET',
+  path: '/actors/{id}/characters',
+  handler: getAllCharacters,
+  options: { validate: validateParamsId },
 },]
 
 
@@ -108,4 +113,9 @@ async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<L
   const { id } = (req.params as ParamsId)
 
   return await actors.remove(id) ? h.response().code(204) : Boom.notFound()
+}
+
+async function getAllCharacters(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+  return actors.characters(id)
 }

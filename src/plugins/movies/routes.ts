@@ -90,7 +90,6 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
     return h.response(result).code(201)
   }
   catch(er: unknown){
-    console.log('er', er)
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
     return Boom.conflict()
   }

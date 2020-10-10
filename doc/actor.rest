@@ -46,3 +46,8 @@ POST {{baseUrl}}/{{id}}/movies
 GET {{baseUrl}}/{{id}}/movies
 
 ###
+
+# @name get actor movies
+GET {{baseUrl}}/{{id}}/characters
+
+###
