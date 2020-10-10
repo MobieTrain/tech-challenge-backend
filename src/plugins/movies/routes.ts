@@ -25,7 +25,7 @@ const validateParamsId: RouteOptionsValidate = {
 interface PayloadMovie {
   name: string
   synopsis: string
-  released_at: Date
+  released_at: string
   runtime: number
   genre_id: number
 }
@@ -82,7 +82,7 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
   const { name, synopsis, released_at, runtime, genre_id } = (req.payload as PayloadMovie)
 
   try {
-    const id = await movies.create(name, synopsis, released_at, runtime, genre_id)
+    const id = await movies.create(name, synopsis, new Date(released_at), runtime, genre_id)
     const result = {
       id,
       path: `${req.route.path}/${id}`
@@ -90,6 +90,7 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
     return h.response(result).code(201)
   }
   catch(er: unknown){
+    console.log('er', er)
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
     return Boom.conflict()
   }
@@ -100,7 +101,7 @@ async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Life
   const { name, synopsis, released_at, runtime, genre_id } = (req.payload as PayloadMovie)
 
   try {
-    return await movies.update(id, name, synopsis, released_at, runtime, genre_id) ? h.response().code(204) : Boom.notFound()
+    return await movies.update(id, name, synopsis, new Date(released_at), runtime, genre_id) ? h.response().code(204) : Boom.notFound()
   }
   catch(er: unknown){
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er

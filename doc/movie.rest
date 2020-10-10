@@ -11,7 +11,11 @@ POST {{baseUrl}}
 Content-Type: application/json
 
 {
-  "name": "jose-{{$guid}}"
+  "name": "some-name",
+  "synopsis": "some-synopsis",
+  "released_at": "1997-05-13",
+  "runtime": 120,
+  "genre_id": 1
 }
 ###
 

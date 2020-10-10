@@ -120,7 +120,7 @@ describe('lib', () => describe('movie', () => {
       await update(anyId, anyName, anySynopsis, anyReleasedAt, anyRuntime, 1)
       sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'movie')
       sinon.assert.calledOnceWithExactly(context.stub.knex_where, { id: anyId })
-      sinon.assert.calledOnceWithExactly(context.stub.knex_update, { name: anyName, synopsis: anySynopsis, released_at: anyReleasedAt, runtime: anyRuntime, genre_id: 1 })
+      sinon.assert.calledOnceWithExactly(context.stub.knex_update, { name: anyName, synopsis: anySynopsis, releasedAt: anyReleasedAt, runtime: anyRuntime, genre_id: 1 })
     })
 
     ; [0, 1].forEach( rows =>
@@ -178,7 +178,7 @@ describe('lib', () => describe('movie', () => {
 
       await create(anyName, anySynopsis, anyReleasedAt, anyRuntime, 1)
       sinon.assert.calledOnceWithExactly(context.stub.knex_into, 'movie')
-      sinon.assert.calledOnceWithExactly(context.stub.knex_insert, { name: anyName, synopsis: anySynopsis, released_at: anyReleasedAt, runtime: anyRuntime, genre_id: 1 })
+      sinon.assert.calledOnceWithExactly(context.stub.knex_insert, { name: anyName, synopsis: anySynopsis, releasedAt: anyReleasedAt, runtime: anyRuntime, genre_id: 1 })
     })
 
     it('returns the `id` created for the new row', async ({context}: Flags) => {
