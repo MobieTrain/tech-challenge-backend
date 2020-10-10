@@ -34,3 +34,15 @@ PUT {{baseUrl}}/{{id}}
 DELETE {{baseUrl}}/{{id}}
 
 ###
+
+# @name bind actor with movie
+POST {{baseUrl}}/{{id}}/movies
+{
+  "movie_id": 1
+}
+###
+
+# @name get actor movies
+GET {{baseUrl}}/{{id}}/movies
+
+###

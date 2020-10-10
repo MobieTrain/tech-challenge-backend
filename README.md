@@ -23,6 +23,8 @@ Genre payload:
 ```
 
 ### MG-0002 Add `Movie` CRUD
+*Already implemented*
+
 Movie payload:
 
 ```ts
@@ -36,6 +38,8 @@ Movie payload:
 ```
 
 ### MG-0003 Add `Actor` CRUD
+*Already implemented*
+
 Actor payload:
 
 ```ts
