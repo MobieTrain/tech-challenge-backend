@@ -113,7 +113,7 @@ describe('lib', () => describe('actor', () => {
       if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       const anyBio = 'any-bio'
-      const anyBornAt = '2019-08-10'
+      const anyBornAt = new Date('1987-11-01')
       context.stub.knex_update.resolves()
 
       await update(anyId, anyName, anyBio, anyBornAt)
@@ -128,7 +128,7 @@ describe('lib', () => describe('actor', () => {
         const anyId = 123
         const anyName = 'any-name'
         const anyBio = 'any-bio'
-        const anyBornAt = '2019-08-10'
+        const anyBornAt = new Date('1987-11-01')
         context.stub.knex_update.resolves(rows)
 
         const result = await update(anyId, anyName, anyBio, anyBornAt)
@@ -170,7 +170,7 @@ describe('lib', () => describe('actor', () => {
       if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       const anyBio = 'any-bio'
-      const anyBornAt = '2001-08-10'
+      const anyBornAt = new Date('1987-11-01')
       context.stub.knex_insert.resolves([])
 
       await create(anyName, anyBio, anyBornAt)
@@ -183,7 +183,7 @@ describe('lib', () => describe('actor', () => {
       const anyId = 123
       const anyName = 'any-name'
       const anyBio = 'any-bio'
-      const anyBornAt = '2001-08-10'
+      const anyBornAt = new Date('1987-11-01')
       context.stub.knex_insert.resolves([anyId])
 
       const result = await create(anyName, anyBio, anyBornAt)

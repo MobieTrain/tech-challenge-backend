@@ -113,7 +113,7 @@ describe('lib', () => describe('movie', () => {
       if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       const anySynopsis = 'any-synopsis'
-      const anyReleasedAt = '2019-08-10'
+      const anyReleasedAt = new Date('2019-08-10')
       const anyRuntime = 120
       context.stub.knex_update.resolves()
 
@@ -129,7 +129,7 @@ describe('lib', () => describe('movie', () => {
         const anyId = 123
         const anyName = 'any-name'
         const anySynopsis = 'any-synopsis'
-        const anyReleasedAt = '2019-08-10'
+        const anyReleasedAt = new Date('2019-08-10')
         const anyRuntime = 120
         context.stub.knex_update.resolves(rows)
 
@@ -172,7 +172,7 @@ describe('lib', () => describe('movie', () => {
       if(!isContext(context)) throw TypeError()
       const anyName = 'any-name'
       const anySynopsis = 'any-synopsis'
-      const anyReleasedAt = '2019-08-10'
+      const anyReleasedAt = new Date('2019-08-10')
       const anyRuntime = 120
       context.stub.knex_insert.resolves([])
 
@@ -186,7 +186,7 @@ describe('lib', () => describe('movie', () => {
       const anyId = 123
       const anyName = 'any-name'
       const anySynopsis = 'any-synopsis'
-      const anyReleasedAt = '2019-08-10'
+      const anyReleasedAt = new Date('2019-08-10')
       const anyRuntime = 120
       context.stub.knex_insert.resolves([anyId])
 

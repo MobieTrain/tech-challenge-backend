@@ -26,6 +26,7 @@
     "@hapi/joi-date": "^2.0.1",
     "joi": "^17.2.1",
     "knex": "^0.21.6",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {
