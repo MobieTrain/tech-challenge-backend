@@ -53,12 +53,13 @@ Actor payload:
 
 
 ### MG-0004 View Actor's movie appearances
-
+*Already implemented*
 As a user, I want to get a list of movies that a given Actor starred on.
 
 ### MG-0005. Select one of the following:
 
 1. View Actor's favorite genre
+*Already implemented*
 As a user, I want to get the favorite genre of a given Actor.
 Business Rule: the favorite genre is the one with the most appearances. 
 
@@ -97,10 +98,14 @@ First start a database instance by running `$ docker-compose up db`. After that,
 *Attention: tests are considered part of code and responsibility of the developer.* Unit tests are provided alongside code, on *spec.ts* files. End to end tests are provided on *docs*. We expect the new code will also contain its own new test cases.
 
 #### New migrations
-
 Example:
 
 `$ knex migrate:make cast -x ts --migrations-directory ./src/db/migrations`
+
+#### Console knex query
+
+```knex.on('query', console.log)```
+```knex.select('name')...```
 
 ### Changes on database
 All changes to the database should be made using [Knex Migrations](http://knexjs.org/#Migrations). There is already one migration in *./src/db/migrations*. To clear the database to its original state, run `$ docker-compose rm db`.

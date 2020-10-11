@@ -5,7 +5,7 @@ import sinon from 'sinon'
 export const lab = script()
 const { beforeEach, before, after, afterEach, describe, it } = lab
 
-import {list, find, remove, create, update, characters, createCharacter, movies} from './actors'
+import {list, find, remove, create, update, characters, createCharacter, movies, favouriteGenre} from './actors'
 import { knex } from '../util/knex'
 
 describe('lib', () => describe('actor', () => {
@@ -78,9 +78,18 @@ describe('lib', () => describe('actor', () => {
       const anyId = 123
 
       await movies(anyId)
-      sinon.assert.calledOnce(context.stub.knex_select)
       sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'movie')
       sinon.assert.calledOnceWithExactly(context.stub.knex_where, { actorId: anyId })
+      sinon.assert.calledOnce(context.stub.knex_select)
+    })
+
+    it('returns favourite genre of a given `actor`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const anyId = 123
+
+      await favouriteGenre(anyId)
+      sinon.assert.calledOnceWithExactly(context.stub.knex_where, { actorId: anyId })
+      sinon.assert.calledOnce(context.stub.knex_select)
     })
 
   })

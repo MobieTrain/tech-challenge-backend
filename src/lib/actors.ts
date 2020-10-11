@@ -1,5 +1,6 @@
 import { knex } from '../util/knex'
 import { Movie } from './movies'
+import Knex from "knex";
 
 export interface Actor {
   id: number
@@ -8,10 +9,9 @@ export interface Actor {
   born_at: Date
 }
 
-export interface Cast {
-  actor_id: number
-  movie_id: number
-  character_name: string
+export interface FavouriteGenre {
+  name: string
+  appearances: number
 }
 
 export function list(): Promise<Actor[]> {
@@ -48,7 +48,7 @@ export async function update(id: number, name: string, bio: string, bornAt: Date
  * Return a list of characters given an actor
  * @param actorId
  */
-export function characters(actorId: number): Promise<string[]> {
+export function characters(actorId: number): Promise<any[]> {
   return knex.from('cast').where('actor_id', actorId).select('character_name')
 }
 
@@ -62,7 +62,7 @@ export async function createCharacter(actor_id: number, movie_id: number, charac
   return id
 }
 
-/** @returns the actor's movie **/
+/** @returns the actor's movies **/
 export async function movies(actorId: number): Promise<Movie[]> {
   return knex.select(
     'movie.id',
@@ -74,4 +74,18 @@ export async function movies(actorId: number): Promise<Movie[]> {
     .innerJoin('cast', 'movie.id', 'cast.movie_id')
     .innerJoin('genre', 'genre.id', 'movie.genre_id')
     .where('cast.actor_id', actorId)
+}
+
+/** @returns the actor's favourite genre **/
+export async function favouriteGenre(actorId: number): Promise<FavouriteGenre[]> {
+  return knex.select(
+    'genre.name',
+    knex.raw('sum(movie.appearances) as appearances'))
+    .from('movie')
+    .innerJoin('cast', 'movie.id', 'cast.movie_id')
+    .innerJoin('genre', 'genre.id', 'movie.genre_id')
+    .where('cast.actor_id', actorId)
+    .groupBy('genre.name')
+    .orderBy('appearances', 'desc')
+    .limit(1)
 }

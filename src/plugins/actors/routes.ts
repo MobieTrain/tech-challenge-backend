@@ -88,6 +88,11 @@ export const actorRoutes: ServerRoute[] = [{
   path: '/actors/{id}/movies',
   handler: getAllMovies,
   options: { validate: validateParamsId },
+},{
+  method: 'GET',
+  path: '/actors/{id}/genre/favourite',
+  handler: getFavouriteGenre,
+  options: { validate: validateParamsId },
 },]
 
 
@@ -164,4 +169,15 @@ async function getAllCharacters(req: Request, _h: ResponseToolkit, _err?: Error)
 async function getAllMovies(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
   return actors.movies(id)
+}
+
+async function getFavouriteGenre(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  try {
+    const {id} = (req.params as ParamsId)
+    return actors.favouriteGenre(id)
+  } catch(er: unknown){
+    console.log(er)
+    if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
+    return Boom.notFound()
+  }
 }

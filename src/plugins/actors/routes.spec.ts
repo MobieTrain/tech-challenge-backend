@@ -36,6 +36,8 @@ describe('plugin', () => describe('actor', () => {
       lib_update: sandbox.stub(lib, 'update'),
       lib_characters: sandbox.stub(lib, 'characters'),
       lib_create_characters: sandbox.stub(lib, 'createCharacter'),
+      lib_movies: sandbox.stub(lib, 'movies'),
+      lib_favourite_genre: sandbox.stub(lib, 'favouriteGenre'),
     }
 
     // all stubs must be made before server starts
@@ -54,6 +56,8 @@ describe('plugin', () => describe('actor', () => {
     context.stub.lib_create.rejects(new Error('test: provide a mock for the result'))
     context.stub.lib_update.rejects(new Error('test: provide a mock for the result'))
     context.stub.lib_characters.rejects(new Error('test: provide a mock for the result'))
+    context.stub.lib_movies.rejects(new Error('test: provide a mock for the result'))
+    context.stub.lib_favourite_genre.rejects(new Error('test: provide a mock for the result'))
   })
 
   afterEach(() => sandbox.resetHistory())
@@ -127,25 +131,6 @@ describe('plugin', () => describe('actor', () => {
 
   })
 
-  describe('GET /actors/:id/characters', () => {
-    const paramId = 123
-    const [method, url] = ['GET', `/actors/${paramId}/characters`]
-
-    it('returns all characters of a given actor', async ({ context }: Flags) => {
-      if(!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method, url }
-      const anyResult = [{'any': 'result'}]
-      context.stub.lib_characters.resolves(anyResult)
-
-      const response = await context.server.inject(opts)
-      expect(response.statusCode).equals(200)
-
-      sinon.assert.calledOnceWithExactly(context.stub.lib_characters, paramId)
-      expect(response.result).equals(anyResult)
-    })
-
-  })
-
   describe('GET /actors/:id', () => {
     const paramId = 123
     const [method, url] = ['GET', `/actors/${paramId}`]
@@ -180,6 +165,61 @@ describe('plugin', () => describe('actor', () => {
       expect(response.result).equals(anyResult)
     })
 
+  })
+
+
+  describe('GET /actors/:id/characters', () => {
+    const paramId = 123
+    const [method, url] = ['GET', `/actors/${paramId}/characters`]
+
+    it('returns all characters of a given actor', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url }
+      const anyResult = [{'any': 'result'}]
+      context.stub.lib_characters.resolves(anyResult)
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(200)
+
+      sinon.assert.calledOnceWithExactly(context.stub.lib_characters, paramId)
+      expect(response.result).equals(anyResult)
+    })
+  })
+
+  describe('GET /actors/:id/movies', () => {
+    const paramId = 123
+    const [method, url] = ['GET', `/actors/${paramId}/movies`]
+
+    it('returns all movies of a given actor', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url }
+      const anyResult = [{'any': 'result'}]
+      context.stub.lib_characters.resolves(anyResult)
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(200)
+
+      sinon.assert.calledOnceWithExactly(context.stub.lib_movies, paramId)
+      expect(response.result).equals(anyResult)
+    })
+  })
+
+  describe('GET /actors/:id/genre/favourite', () => {
+    const paramId = 123
+    const [method, url] = ['GET', `/actors/${paramId}/genre/favourite`]
+
+    it('returns the favourite genre of a given actor', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url }
+      const anyResult = [{'any': 'result'}]
+      context.stub.lib_characters.resolves(anyResult)
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(200)
+
+      sinon.assert.calledOnceWithExactly(context.stub.lib_favourite_genre, paramId)
+      expect(response.result).equals(anyResult)
+    })
   })
 
   describe('PUT /actors/:id', () => {
