@@ -5,7 +5,7 @@ import sinon from 'sinon'
 export const lab = script()
 const { beforeEach, before, after, afterEach, describe, it } = lab
 
-import { list, find, remove, create, update, characters } from './actors'
+import {list, find, remove, create, update, characters, createCharacter, movies} from './actors'
 import { knex } from '../util/knex'
 
 describe('lib', () => describe('actor', () => {
@@ -70,6 +70,16 @@ describe('lib', () => describe('actor', () => {
 
       await characters(anyId)
       sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'cast')
+      sinon.assert.calledOnce(context.stub.knex_select)
+    })
+
+    it('returns movies of a given `actor`', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const anyId = 123
+
+      await movies(anyId)
+      sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'movie')
+      sinon.assert.calledOnceWithExactly(context.stub.knex_where, { actorId: anyId })
       sinon.assert.calledOnce(context.stub.knex_select)
     })
 
@@ -198,6 +208,19 @@ describe('lib', () => describe('actor', () => {
       const result = await create(anyName, anyBio, anyBornAt)
       expect(result).to.be.number()
       expect(result).equals(anyId)
+    })
+
+    it('returns the `cast` created for the new cast', async ({context}: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const anyId = 123
+      const anyActorId = 123
+      const anyMovieId = 321
+      const anyCharacterName = 'Foo Bar'
+      context.stub.knex_insert.resolves([anyActorId, anyMovieId, anyCharacterName])
+
+      const id = await createCharacter(anyActorId, anyMovieId, anyCharacterName)
+      expect(id).to.be.number()
+      expect(id).equals(anyId)
     })
 
   })

@@ -7,6 +7,7 @@ export async function up(knex: Knex): Promise<void> {
     table.string('synopsis', 255).nullable()
     table.date('released_at').notNullable()
     table.integer('runtime').notNullable()
+    table.integer('appearances').nullable().defaultTo(0)
     table.integer('genre_id').unsigned().index()
     table.foreign('genre_id').references('id').inTable('genre')
     table.unique(['name'])

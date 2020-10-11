@@ -12,7 +12,6 @@ import Boom from '@hapi/boom'
 import * as actors from '../../lib/actors'
 import { isHasCode } from '../../util/types'
 
-
 interface ParamsId {
   id: number
 }
@@ -27,11 +26,25 @@ interface PayloadActor {
   bio: string
   born_at: Date
 }
+
+interface PayloadCast {
+  actor_id: number
+  movie_id: number
+  character_name: string
+}
+
 const validatePayloadActor: RouteOptionsResponseSchema = {
   payload: joi.object({
     name: joi.string().required(),
     bio: joi.string().required(),
     born_at: joi.date().required(),
+  })
+}
+
+const validatePayloadActorCharacter: RouteOptionsResponseSchema = {
+  payload: joi.object({
+    movie_id: joi.number().required(),
+    character_name: joi.string().required()
   })
 }
 
@@ -45,6 +58,11 @@ export const actorRoutes: ServerRoute[] = [{
   path: '/actors',
   handler: post,
   options: { validate: validatePayloadActor },
+},{
+  method: 'POST',
+  path: '/actors/{id}/characters',
+  handler: createCharacter,
+  options: { validate: {...validateParamsId, ...validatePayloadActorCharacter} },
 },{
   method: 'GET',
   path: '/actors/{id}',
@@ -64,6 +82,11 @@ export const actorRoutes: ServerRoute[] = [{
   method: 'GET',
   path: '/actors/{id}/characters',
   handler: getAllCharacters,
+  options: { validate: validateParamsId },
+},{
+  method: 'GET',
+  path: '/actors/{id}/movies',
+  handler: getAllMovies,
   options: { validate: validateParamsId },
 },]
 
@@ -96,6 +119,24 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
   }
 }
 
+async function createCharacter(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+  const { movie_id, character_name } = (req.payload as PayloadCast)
+
+  try {
+    await actors.createCharacter(id, movie_id, character_name)
+    const result = {
+      path: `${req.route.path}/${id}`
+    }
+    return h.response(result).code(201)
+  }
+  catch(er: unknown){
+    console.error(er)
+    if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
+    return Boom.conflict()
+  }
+}
+
 async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
   const { name, bio, born_at } = (req.payload as PayloadActor)
@@ -118,4 +159,9 @@ async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<L
 async function getAllCharacters(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
   return actors.characters(id)
+}
+
+async function getAllMovies(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+  return actors.movies(id)
 }

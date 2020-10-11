@@ -16,6 +16,7 @@ describe('plugin', () => describe('movie', () => {
     name: 'some-name',
     synopsis: 'some-synopsis',
     released_at: new Date('1997-05-13'),
+    appearances: 800000,
     runtime: 90,
     genre_id: 1
   }
@@ -123,7 +124,7 @@ describe('plugin', () => describe('movie', () => {
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(201)
 
-      sinon.assert.calledOnceWithExactly(context.stub.lib_create, payload.name, payload.synopsis, payload.released_at, payload.runtime, payload.genre_id)
+      sinon.assert.calledOnceWithExactly(context.stub.lib_create, payload.name, payload.synopsis, payload.released_at, payload.runtime, payload.appearances, payload.genre_id)
       expect(response.result).equals({
         id: anyResult,
         path: `/movies/${anyResult}`
@@ -215,7 +216,7 @@ describe('plugin', () => describe('movie', () => {
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(204)
 
-      sinon.assert.calledOnceWithExactly(context.stub.lib_update, paramId, payload.name, payload.synopsis, payload.released_at, payload.runtime, payload.genre_id)
+      sinon.assert.calledOnceWithExactly(context.stub.lib_update, paramId, payload.name, payload.synopsis, payload.released_at, payload.runtime, payload.appearances, payload.genre_id)
       expect(response.result).to.be.null()
     })
 

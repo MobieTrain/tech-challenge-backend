@@ -27,6 +27,7 @@ interface PayloadMovie {
   synopsis: string
   released_at: string
   runtime: number
+  appearances: number
   genre_id: number
 }
 const validatePayloadMovie: RouteOptionsResponseSchema = {
@@ -35,6 +36,7 @@ const validatePayloadMovie: RouteOptionsResponseSchema = {
     synopsis: joi.string(),
     released_at: joi.date().required(),
     runtime: joi.number().required(),
+    appearances: joi.number(),
     genre_id: joi.number()
   })
 }
@@ -79,10 +81,10 @@ async function get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lif
 }
 
 async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const { name, synopsis, released_at, runtime, genre_id } = (req.payload as PayloadMovie)
+  const { name, synopsis, released_at, runtime, appearances, genre_id } = (req.payload as PayloadMovie)
 
   try {
-    const id = await movies.create(name, synopsis, new Date(released_at), runtime, genre_id)
+    const id = await movies.create(name, synopsis, new Date(released_at), runtime, appearances, genre_id)
     const result = {
       id,
       path: `${req.route.path}/${id}`
@@ -97,10 +99,10 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
 
 async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const { id } = (req.params as ParamsId)
-  const { name, synopsis, released_at, runtime, genre_id } = (req.payload as PayloadMovie)
+  const { name, synopsis, released_at, runtime, appearances, genre_id } = (req.payload as PayloadMovie)
 
   try {
-    return await movies.update(id, name, synopsis, new Date(released_at), runtime, genre_id) ? h.response().code(204) : Boom.notFound()
+    return await movies.update(id, name, synopsis, new Date(released_at), runtime, appearances, genre_id) ? h.response().code(204) : Boom.notFound()
   }
   catch(er: unknown){
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er

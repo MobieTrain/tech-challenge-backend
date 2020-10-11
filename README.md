@@ -60,7 +60,7 @@ As a user, I want to get a list of movies that a given Actor starred on.
 
 1. View Actor's favorite genre
 As a user, I want to get the favorite genre of a given Actor.
-Business Rule: the favorite genre is the one with the most appearances.
+Business Rule: the favorite genre is the one with the most appearances. 
 
 2. View Actor's number of Movies in Genres
 As a user, I want to get the number of movies by genre on an actor profile page.
@@ -69,6 +69,7 @@ As a user, I want to get the number of movies by genre on an actor profile page.
 As a user, I want to get a list of actors for a given Genre ordered by movie appearances.
 
 ### MG-0006. View Actor's character names
+*Already implemented*
 
 As a user, I want to get a list of character names of a given Actor.
 

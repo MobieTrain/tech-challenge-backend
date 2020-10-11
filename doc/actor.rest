@@ -47,7 +47,17 @@ GET {{baseUrl}}/{{id}}/movies
 
 ###
 
-# @name get actor movies
+# @name get actor characters
 GET {{baseUrl}}/{{id}}/characters
 
+###
+
+# @name create character
+POST {{baseUrl}}/{{id}}/characters
+Content-Type: application/json
+
+{
+  "movie_id": 1,
+  "character_name": "character name"
+}
 ###
