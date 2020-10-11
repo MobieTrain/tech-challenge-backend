@@ -124,14 +124,14 @@ async function createCharacter(req: Request, h: ResponseToolkit, _err?: Error): 
   const { movie_id, character_name } = (req.payload as PayloadCast)
 
   try {
-    await actors.createCharacter(id, movie_id, character_name)
+    const characterId = await actors.createCharacter(id, movie_id, character_name)
     const result = {
-      path: `${req.route.path}/${id}`
+      id: characterId,
+      path: `/actors/${id}/characters/${characterId}`
     }
     return h.response(result).code(201)
   }
   catch(er: unknown){
-    console.error(er)
     if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
     return Boom.conflict()
   }

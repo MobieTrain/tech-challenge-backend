@@ -35,6 +35,7 @@ describe('plugin', () => describe('actor', () => {
       lib_create: sandbox.stub(lib, 'create'),
       lib_update: sandbox.stub(lib, 'update'),
       lib_characters: sandbox.stub(lib, 'characters'),
+      lib_create_characters: sandbox.stub(lib, 'createCharacter'),
     }
 
     // all stubs must be made before server starts
@@ -230,6 +231,53 @@ describe('plugin', () => describe('actor', () => {
 
       sinon.assert.calledOnceWithExactly(context.stub.lib_update, paramId, payload.name, payload.bio, payload.born_at)
       expect(response.result).to.be.null()
+    })
+
+  })
+
+  describe('POST /actors/:id/characters', () => {
+    const paramId = 123
+    const [method, url, payload] = ['POST', `/actors/${paramId}/characters`, {'movie_id': 321, 'character_name': 'any-character'}]
+
+    it('validates payload is not empty', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url, payload: undefined}
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(400)
+    })
+
+    it('validates payload matches `actor character`', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url, payload: {'unexpected': 'object'}}
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(400)
+    })
+
+    it('returns HTTP 409 when given `actor_id` and `movie_id` already exists', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url, payload }
+      context.stub.lib_create_characters.rejects({ code: 'ER_DUP_ENTRY'})
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(409)
+    })
+
+    it('returns HTTP 201', async ({ context }: Flags) => {
+      if(!isContext(context)) throw TypeError()
+      const opts: Hapi.ServerInjectOptions = { method, url, payload }
+      const anyResult = 123
+      context.stub.lib_create_characters.resolves(anyResult)
+
+      const response = await context.server.inject(opts)
+      expect(response.statusCode).equals(201)
+
+      sinon.assert.calledOnceWithExactly(context.stub.lib_create_characters, paramId, payload.movie_id, payload.character_name)
+      expect(response.result).equals({
+        id: anyResult,
+        path: `/actors/${paramId}/characters/${anyResult}`
+      })
     })
 
   })

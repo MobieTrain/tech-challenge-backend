@@ -78,9 +78,9 @@ describe('lib', () => describe('actor', () => {
       const anyId = 123
 
       await movies(anyId)
+      sinon.assert.calledOnce(context.stub.knex_select)
       sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'movie')
       sinon.assert.calledOnceWithExactly(context.stub.knex_where, { actorId: anyId })
-      sinon.assert.calledOnce(context.stub.knex_select)
     })
 
   })
