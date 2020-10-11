@@ -15,10 +15,10 @@ export interface Movie {
 /** @returns the ID that was created */
 export async function create(
   name: string,
-  synopsis: string,
   released_at: Date,
   runtime: number,
   genre_id: number,
+  synopsis?: string,
 ): Promise<number> {
   const [id] = await (knex.into(MOVIE_TABLE).insert({
     name,
