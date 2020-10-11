@@ -1,6 +1,7 @@
 import { knex } from '../util/knex'
 
 const MOVIE_TABLE = "movie";
+const MOVIE_ACTOR_TABLE = "movie_actor";
 
 export interface Movie {
   id: number;
@@ -58,4 +59,35 @@ export async function update(
     genre_id,
   })
   return count > 0
+}
+
+export async function addToTheCast(
+  id: number,
+  actorsIds: number[],
+): Promise<any> {
+  const actorsNotInCast = [];
+  for (const actorId of actorsIds) {
+    if (!await alreadyInTheCast(id, actorId)) {
+      actorsNotInCast.push(actorId);
+    }
+  }
+  return Promise.all(actorsNotInCast.map(actorId => knex.into(MOVIE_ACTOR_TABLE).insert({ 
+    movie_id: id,
+    actor_id: actorId,
+  })));
+}
+
+async function alreadyInTheCast(
+  id: number,
+  actorId: number,
+): Promise<boolean> {
+  const relations = (await knex.count("movie_id").from(MOVIE_ACTOR_TABLE).where({ 
+    movie_id: id,
+    actor_id: actorId,
+  }).first());
+  if (!!relations && relations['count(`movie_id`)'] > 0) {
+    return true;
+  } else {
+    return false;
+  }
 }
