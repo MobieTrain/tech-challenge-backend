@@ -1,7 +1,7 @@
 import { knex } from '../util/knex'
 
-const MOVIE_TABLE = "movie";
-const MOVIE_ACTOR_TABLE = "movie_actor";
+export const MOVIE_TABLE = "movie";
+export const MOVIE_ACTOR_TABLE = "movie_actor";
 
 export interface Movie {
   id: number;

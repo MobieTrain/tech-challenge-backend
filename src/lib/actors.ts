@@ -1,4 +1,5 @@
 import { knex } from '../util/knex'
+import { Movie, MOVIE_ACTOR_TABLE, MOVIE_TABLE } from './movies';
 
 const ACTOR_TABLE = "actor";
 
@@ -24,6 +25,15 @@ export async function create(
 
 export function list(): Promise<Actor[]> {
   return knex.from(ACTOR_TABLE).select()
+}
+
+export function listMovieAppearances(id: number): Promise<Movie[]> {
+  return knex
+    .select(MOVIE_TABLE + ".*")
+    .from(ACTOR_TABLE)
+    .join(MOVIE_ACTOR_TABLE, ACTOR_TABLE + '.id', '=', MOVIE_ACTOR_TABLE + '.actor_id')
+    .join(MOVIE_TABLE, MOVIE_TABLE + '.id', '=', MOVIE_ACTOR_TABLE + '.movie_id')
+    .where(ACTOR_TABLE + '.id', id);
 }
 
 export function find(id: number): Promise<Actor> {
