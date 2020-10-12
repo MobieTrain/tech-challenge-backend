@@ -18,7 +18,7 @@
     "lint:tdd": "nodemon --watch ./src --ext ts  --exec npm run lint",
     "lint": "eslint . --ext .ts",
     "test:tdd": "nodemon --delay 0.01 --inspect=7001 --watch ./src --ext ts,json --exec npm test",
-    "test": "lab ./src --pattern '\\.spec'"
+    "test": "lab ./src --pattern spec"
   },
   "dependencies": {
     "@hapi/boom": "^9.1.0",
