@@ -64,13 +64,12 @@ export async function createCharacter(actor_id: number, movie_id: number, charac
 
 /** @returns the actor's movies **/
 export async function movies(actorId: number): Promise<Movie[]> {
-  return knex.select(
+  return knex.table('movie').select(
     'movie.id',
     'movie.name',
     'movie.synopsis',
     'movie.runtime',
     {genre_name: 'genre.name'})
-    .from('movie')
     .innerJoin('cast', 'movie.id', 'cast.movie_id')
     .innerJoin('genre', 'genre.id', 'movie.genre_id')
     .where('cast.actor_id', actorId)
@@ -78,10 +77,9 @@ export async function movies(actorId: number): Promise<Movie[]> {
 
 /** @returns the actor's favourite genre **/
 export async function favouriteGenre(actorId: number): Promise<FavouriteGenre[]> {
-  return knex.select(
+  return knex.table('movie').select(
     'genre.name',
     knex.raw('sum(movie.appearances) as appearances'))
-    .from('movie')
     .innerJoin('cast', 'movie.id', 'cast.movie_id')
     .innerJoin('genre', 'genre.id', 'movie.genre_id')
     .where('cast.actor_id', actorId)

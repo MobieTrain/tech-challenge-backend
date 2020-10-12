@@ -54,12 +54,12 @@ Actor payload:
 
 ### MG-0004 View Actor's movie appearances
 *Already implemented*
+
 As a user, I want to get a list of movies that a given Actor starred on.
 
 ### MG-0005. Select one of the following:
 
-1. View Actor's favorite genre
-*Already implemented*
+1. *Already implemented* - View Actor's favorite genre
 As a user, I want to get the favorite genre of a given Actor.
 Business Rule: the favorite genre is the one with the most appearances. 
 

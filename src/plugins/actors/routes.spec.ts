@@ -194,7 +194,7 @@ describe('plugin', () => describe('actor', () => {
       if(!isContext(context)) throw TypeError()
       const opts: Hapi.ServerInjectOptions = { method, url }
       const anyResult = [{'any': 'result'}]
-      context.stub.lib_characters.resolves(anyResult)
+      context.stub.lib_movies.resolves(anyResult)
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(200)
@@ -212,7 +212,7 @@ describe('plugin', () => describe('actor', () => {
       if(!isContext(context)) throw TypeError()
       const opts: Hapi.ServerInjectOptions = { method, url }
       const anyResult = [{'any': 'result'}]
-      context.stub.lib_characters.resolves(anyResult)
+      context.stub.lib_favourite_genre.resolves(anyResult)
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(200)

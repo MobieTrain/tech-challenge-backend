@@ -28,12 +28,14 @@ describe('lib', () => describe('actor', () => {
     context.stub = {
       knex_from: sandbox.stub(knex, 'from'),
       knex_select: sandbox.stub(knex, 'select'),
+      knex_raw: sandbox.stub(knex, 'raw'),
       knex_where: sandbox.stub(knex, 'where'),
       knex_first: sandbox.stub(knex, 'first'),
       knex_delete: sandbox.stub(knex, 'delete'),
       knex_into: sandbox.stub(knex, 'into'),
       knex_insert: sandbox.stub(knex, 'insert'),
       knex_update: sandbox.stub(knex, 'update'),
+      knex_limit: sandbox.stub(knex, 'limit'),
       console: sandbox.stub(console, 'error'),
     }
   })
@@ -46,6 +48,8 @@ describe('lib', () => describe('actor', () => {
     context.stub.knex_where.returnsThis()
     context.stub.knex_first.returnsThis()
     context.stub.knex_into.returnsThis()
+    context.stub.knex_raw.returnsThis()
+    context.stub.knex_limit.returnsThis()
     context.stub.knex_delete.rejects(new Error('test: expectation not provided'))
     context.stub.knex_insert.rejects(new Error('test: expectation not provided'))
     context.stub.knex_update.rejects(new Error('test: expectation not provided'))
@@ -77,19 +81,8 @@ describe('lib', () => describe('actor', () => {
       if(!isContext(context)) throw TypeError()
       const anyId = 123
 
-      await movies(anyId)
-      sinon.assert.calledOnceWithExactly(context.stub.knex_from, 'movie')
-      sinon.assert.calledOnceWithExactly(context.stub.knex_where, { actorId: anyId })
-      sinon.assert.calledOnce(context.stub.knex_select)
-    })
-
-    it('returns favourite genre of a given `actor`', async ({context}: Flags) => {
-      if(!isContext(context)) throw TypeError()
-      const anyId = 123
-
-      await favouriteGenre(anyId)
-      sinon.assert.calledOnceWithExactly(context.stub.knex_where, { actorId: anyId })
-      sinon.assert.calledOnce(context.stub.knex_select)
+      const result = await movies(anyId)
+      expect(result).to.be.array()
     })
 
   })
