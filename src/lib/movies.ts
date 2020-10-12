@@ -64,14 +64,14 @@ export async function update(
 export async function addToTheCast(
   id: number,
   actorsIds: number[],
-): Promise<any> {
+): Promise<void> {
   const actorsNotInCast = [];
   for (const actorId of actorsIds) {
     if (!await alreadyInTheCast(id, actorId)) {
       actorsNotInCast.push(actorId);
     }
   }
-  return Promise.all(actorsNotInCast.map(actorId => knex.into(MOVIE_ACTOR_TABLE).insert({ 
+  await Promise.all(actorsNotInCast.map(actorId => knex.into(MOVIE_ACTOR_TABLE).insert({ 
     movie_id: id,
     actor_id: actorId,
   })));

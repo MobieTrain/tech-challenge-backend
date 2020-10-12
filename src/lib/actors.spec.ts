@@ -4,7 +4,7 @@ import { expect } from '@hapi/code'
 import sinon from 'sinon'
 
 export const lab = script()
-const { after, afterEach, describe, it } = lab
+const { afterEach, describe, it } = lab
 
 import { create, remove, list, find, listMovieAppearances, listGenderFrequency, findFavoriteGenre, update } from './actors'
 import { knex } from '../util/knex'
@@ -149,7 +149,7 @@ describe('lib', () => describe('genre', () => {
       expect(await findFavoriteGenre(1)).to.equal("Mystery");
     })
 
-    it('should return null if the user has not participated in any movie', async () => {
+    it('should return null if the actor has not participated in any movie', async () => {
       sandbox.stub(knex, 'select').returnsThis()
       sandbox.stub(knex, 'count').returnsThis()
       sandbox.stub(knex, 'from').returnsThis()
@@ -220,11 +220,9 @@ describe('lib', () => describe('genre', () => {
     it('returns one row from table `actors`, by `id`', async () => {
       const dummy = {
         id: 123,
-        name: "movie",
-        synopsis: "syn",
-        released_at: new Date("2020-10-12T19:29:51.479Z"),
-        runtime: 88,
-        genre_id: 1,
+        name: "foo",
+        bio: "lorem",
+        born_at: new Date("2020-10-12T19:29:51.479Z"),
       }
       const knex_from = sandbox.stub(knex, 'from').returnsThis()
       const knex_where = sandbox.stub(knex, 'where').returnsThis()
