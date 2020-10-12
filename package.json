@@ -12,8 +12,9 @@
     "prestart": "npm run db:init && npm run db:latest",
     "start": "NODE_PATH=./dist node ./dist/index.js",
     "local": "ts-node-dev --inspect=7000 ./src/index.ts",
-    "db:init": "node dist/db/create-database.js",
-    "db:latest": "npx knex migrate:latest --knexfile dist/knexfile.js",
+    "db:init": "node ./dist/db/create-database.js",
+    "db:latest": "npm run build && npx knex migrate:latest --knexfile dist/knexfile.js",
+    "db:reset": "npx knex migrate:rollback --knexfile dist/knexfile.js",
     "lint:tdd": "nodemon --watch ./src --ext ts  --exec npm run lint",
     "lint": "eslint . --ext .ts",
     "test:tdd": "nodemon --delay 0.01 --inspect=7001 --watch ./src --ext ts,json --exec npm test",
@@ -22,8 +23,10 @@
   "dependencies": {
     "@hapi/boom": "^9.1.0",
     "@hapi/hapi": "^20.0.0",
+    "@hapi/joi-date": "^2.0.1",
     "joi": "^17.2.1",
     "knex": "^0.21.6",
+    "moment": "^2.29.1",
     "mysql": "^2.18.1"
   },
   "devDependencies": {

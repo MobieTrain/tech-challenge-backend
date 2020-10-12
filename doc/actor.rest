@@ -1,0 +1,68 @@
+@baseUrl=http://localhost:8080/actors
+@id={{create.response.body.id}}
+
+# @name getAll
+GET {{baseUrl}}
+
+###
+
+# @name create
+POST {{baseUrl}}
+Content-Type: application/json
+
+{
+  "name": "jose-{{$guid}}",
+  "bio": "bio text",
+  "born_at": "YYYY-MM-DD"
+}
+###
+
+# @name getOne
+GET {{baseUrl}}/{{id}}
+
+###
+
+# @name update
+PUT {{baseUrl}}/{{id}}
+
+{
+  "name": "jose-ferreira-{{$guid}}"
+}
+###
+
+# @name remove
+DELETE {{baseUrl}}/{{id}}
+
+###
+
+# @name bind actor with movie
+POST {{baseUrl}}/{{id}}/movies
+{
+  "movie_id": 1
+}
+###
+
+# @name get actor movies
+GET {{baseUrl}}/{{id}}/movies
+
+###
+
+# @name get actor favourite genre
+GET {{baseUrl}}/{{id}}/genre/favourite
+
+###
+
+# @name get actor characters
+GET {{baseUrl}}/{{id}}/characters
+
+###
+
+# @name create character
+POST {{baseUrl}}/{{id}}/characters
+Content-Type: application/json
+
+{
+  "movie_id": 1,
+  "character_name": "character name"
+}
+###

@@ -19,7 +19,7 @@ const knexConfig: Config = {
     host: API_SQL_HOST,
     port: parseInt(API_SQL_PORT, 10),
     database: undefined,
-    user: 'root',
+    user: API_SQL_USER,
     password: MYSQL_ROOT_PASSWORD,
   }
 }

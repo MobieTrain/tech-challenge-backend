@@ -1,2 +1,13 @@
 node_modules
 dist
+/.idea/dataSources.local.xml
+/.idea/dataSources/bb75d7c4-5b26-4777-9f20-64bd2641378a.xml
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/dataSources.xml
+/.idea/dataSources/bb75d7c4-5b26-4777-9f20-64bd2641378a/storage_v2/_src_/schema/information_schema.FNRwLQ.meta
+/.idea/modules.xml
+/.idea/codeStyles/Project.xml
+/.idea/inspectionProfiles/Project_Default.xml
+/.idea/tech-challenge-backend.iml
+/.idea/vcs.xml
+/.idea/workspace.xml

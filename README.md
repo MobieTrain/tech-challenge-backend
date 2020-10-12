@@ -23,6 +23,8 @@ Genre payload:
 ```
 
 ### MG-0002 Add `Movie` CRUD
+*Already implemented*
+
 Movie payload:
 
 ```ts
@@ -36,6 +38,8 @@ Movie payload:
 ```
 
 ### MG-0003 Add `Actor` CRUD
+*Already implemented*
+
 Actor payload:
 
 ```ts
@@ -49,14 +53,15 @@ Actor payload:
 
 
 ### MG-0004 View Actor's movie appearances
+*Already implemented*
 
 As a user, I want to get a list of movies that a given Actor starred on.
 
 ### MG-0005. Select one of the following:
 
-1. View Actor's favorite genre
+1. *Already implemented* - View Actor's favorite genre
 As a user, I want to get the favorite genre of a given Actor.
-Business Rule: the favorite genre is the one with the most appearances.
+Business Rule: the favorite genre is the one with the most appearances. 
 
 2. View Actor's number of Movies in Genres
 As a user, I want to get the number of movies by genre on an actor profile page.
@@ -65,6 +70,7 @@ As a user, I want to get the number of movies by genre on an actor profile page.
 As a user, I want to get a list of actors for a given Genre ordered by movie appearances.
 
 ### MG-0006. View Actor's character names
+*Already implemented*
 
 As a user, I want to get a list of character names of a given Actor.
 
@@ -90,6 +96,16 @@ Fork this repository into your GitHub workspace and work from there.
 First start a database instance by running `$ docker-compose up db`. After that, you can start the service by running `$ npm run local`. This will start a development HTTP server on port TCP 8080, using the environment variables defined in *.env.dev*. You can develop using TDD with `$ npm run test:tdd`. A linter is configured and can be run as `$ npm run lint`.
 
 *Attention: tests are considered part of code and responsibility of the developer.* Unit tests are provided alongside code, on *spec.ts* files. End to end tests are provided on *docs*. We expect the new code will also contain its own new test cases.
+
+#### New migrations
+Example:
+
+`$ knex migrate:make cast -x ts --migrations-directory ./src/db/migrations`
+
+#### Console knex query
+
+```knex.on('query', console.log)```
+```knex.select('name')...```
 
 ### Changes on database
 All changes to the database should be made using [Knex Migrations](http://knexjs.org/#Migrations). There is already one migration in *./src/db/migrations*. To clear the database to its original state, run `$ docker-compose rm db`.
