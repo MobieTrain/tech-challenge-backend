@@ -13,8 +13,8 @@ export interface Actor {
 
 export async function create(
   name: string,
-  bio: string,
   born_at: Date,
+  bio?: string,
 ): Promise<number> {
   const [id] = await (knex.into(ACTOR_TABLE).insert({
     name,
@@ -71,8 +71,8 @@ export async function remove(id: number): Promise<boolean> {
 export async function update(
   id: number,
   name: string,
-  bio: string,
   born_at: Date,
+  bio?: string,
 ): Promise<boolean> {
   const count = await knex.from(ACTOR_TABLE).where({ id }).update({
     name,
