@@ -12,6 +12,16 @@ import joi from 'joi'
 import Boom from '@hapi/boom'
 import { isHasCode } from '../../util/types'
 
+interface ParamsId {
+  id: number
+}
+
+const validateParamsId: RouteOptionsValidate = {
+  params: joi.object({
+    id: joi.number().required().min(1),
+  })
+}
+
 interface PayloadMovies {
   name: string;
   synopsis?: string;
@@ -26,7 +36,7 @@ const validatePayloadMovie: RouteOptionsResponseSchema = {
     synopsis: joi.string(),
     released_at: joi.date().required(),
     runtime: joi.number().required(),
-    genre_id: joi.number().required(),
+    genre_id: joi.number().required().min(1),
   })
 }
 
@@ -39,6 +49,21 @@ export const movieRoutes: ServerRoute[] = [{
   path: '/movies',
   handler: post,
   options: { validate: validatePayloadMovie },
+},{
+  method: 'PUT',
+  path: '/movies/{id}',
+  handler: put,
+  options: { validate: {...validateParamsId, ...validatePayloadMovie} },
+},{
+  method: 'GET',
+  path: '/movies/{id}',
+  handler: get,
+  options: { validate: validateParamsId },
+},{
+  method: 'DELETE',
+  path: '/movies/{id}',
+  handler: remove,
+  options: { validate: validateParamsId },
 }]
 
 
@@ -47,9 +72,9 @@ async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise
 }
 
 async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const input: PayloadMovies = req.payload as PayloadMovies;
-  const { name, released_at, runtime, genre_id } = input;
-  const synopsis = !!input.synopsis ? input.synopsis : undefined;
+  const payload: PayloadMovies = req.payload as PayloadMovies;
+  const { name, released_at, runtime, genre_id } = payload;
+  const synopsis = !!payload.synopsis ? payload.synopsis : undefined;
 
   try {
     const id = await movies.create(name, released_at, runtime, genre_id, synopsis)
@@ -59,8 +84,62 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
     }
     return h.response(result).code(201)
   }
+  catch (er: unknown) {
+    if(isHasCode(er) && er.code.includes('ER_NO_REFERENCED_ROW')) {
+      return Boom.badRequest(`related genre does not exists`)
+    } else {
+      throw er;
+    }
+  }
+}
+
+async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const params = req.params as ParamsId;
+  const { id } = params;
+  const payload: PayloadMovies = req.payload as PayloadMovies;
+  const { name, released_at, runtime, genre_id } = payload;
+  const synopsis = !!payload.synopsis ? payload.synopsis : undefined;
+
+  try {
+    if (await movies.update(
+      id, name, released_at, runtime, genre_id, synopsis
+    )) {
+      return h.response().code(204)
+    } else {
+      return Boom.notFound()
+    }
+  }
   catch(er: unknown){
-    if(!isHasCode(er) || er.code !== 'ER_DUP_ENTRY') throw er
-    return Boom.conflict()
+    if(isHasCode(er) && er.code.includes('ER_NO_REFERENCED_ROW')) {
+      return Boom.badRequest(`related genre does not exists`)
+    } else {
+      throw er;
+    }
+  }
+}
+
+async function get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+
+  const found = await movies.find(id)
+  return found || Boom.notFound()
+}
+
+async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+
+  try {
+    if (await movies.remove(id)) {
+      return h.response().code(204)
+    } else {
+      return Boom.notFound()
+    }
+  }
+  catch(er: unknown){
+    if(isHasCode(er) && er.code.includes('ER_ROW_IS_REFERENCED')) {
+      return Boom.badRequest(`movie has related actors`)
+    } else {
+      throw er;
+    }
   }
 }

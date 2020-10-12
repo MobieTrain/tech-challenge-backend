@@ -46,10 +46,10 @@ export async function remove(id: number): Promise<boolean> {
 export async function update(
   id: number,
   name: string,
-  synopsis: string,
   released_at: Date,
   runtime: number,
   genre_id: number,
+  synopsis?: string,
 ): Promise<boolean> {
   const count = await knex.from(MOVIE_TABLE).where({ id }).update({
     name,
