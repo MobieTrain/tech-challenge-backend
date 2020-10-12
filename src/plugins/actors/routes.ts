@@ -61,13 +61,16 @@ export const actorRoutes: ServerRoute[] = [{
   path: '/actors/{id}',
   handler: remove,
   options: { validate: validateParamsId },
-}]
-
+},{
+  method: 'GET',
+  path: '/actors/{id}/movies',
+  handler: getMovies,
+  options: { validate: validateParamsId },
+},]
 
 async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   return actors.list()
 }
-
 
 async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   const payload: PayloadActor = req.payload as PayloadActor;
@@ -103,6 +106,18 @@ async function get(req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lif
 
   const found = await actors.find(id)
   return found || Boom.notFound()
+}
+
+async function getMovies(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+  const actor = await actors.find(id)
+
+  if (!!actor) {
+    const movies = await actors.listMovieAppearances(actor.id)
+    return h.response({ ...actor, movies })
+  } else {
+    return Boom.notFound()
+  }
 }
 
 async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
