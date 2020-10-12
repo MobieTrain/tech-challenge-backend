@@ -66,7 +66,12 @@ export const actorRoutes: ServerRoute[] = [{
   path: '/actors/{id}/movies',
   handler: getMovies,
   options: { validate: validateParamsId },
-},]
+},{
+  method: 'GET',
+  path: '/actors/{id}/movies/genres/favorite',
+  handler: getFavoriteGenre,
+  options: { validate: validateParamsId },
+}]
 
 async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
   return actors.list()
@@ -115,6 +120,18 @@ async function getMovies(req: Request, h: ResponseToolkit, _err?: Error): Promis
   if (!!actor) {
     const movies = await actors.listMovieAppearances(actor.id)
     return h.response({ ...actor, movies })
+  } else {
+    return Boom.notFound()
+  }
+}
+
+async function getFavoriteGenre(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
+  const { id } = (req.params as ParamsId)
+  const actor = await actors.find(id)
+
+  if (!!actor) {
+    const genre = await actors.findFavoriteGenre(actor.id) || ""
+    return h.response({ ...actor, genre })
   } else {
     return Boom.notFound()
   }
