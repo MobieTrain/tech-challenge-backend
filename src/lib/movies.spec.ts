@@ -51,7 +51,7 @@ describe('lib', () => describe('genre', () => {
       knex_select.resolves(dummy)
 
       const data = await list();
-      expect(data).to.equal(dummy);
+      expect(data).to.equal(dummy as any);
       expect(knex_from.firstCall.firstArg).to.equal(`movie`);
     })
 
