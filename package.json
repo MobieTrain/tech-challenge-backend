@@ -17,6 +17,7 @@
     "db:latest": "npx knex migrate:latest --knexfile dist/knexfile.js",
     "lint:tdd": "nodemon --watch ./src --ext ts  --exec npm run lint",
     "lint": "eslint . --ext .ts",
+    "lint:fix": "eslint . --ext .ts --fix",
     "test:tdd": "nodemon --delay 0.01 --inspect=7001 --watch ./src --ext ts,json --exec npm test",
     "test": "lab ./src --pattern spec"
   },

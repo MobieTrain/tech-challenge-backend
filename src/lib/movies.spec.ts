@@ -24,12 +24,12 @@ describe('lib', () => describe('genre', () => {
       knex_into.returnsThis()
       const knex_insert = sandbox.stub(knex, 'insert')
       knex_insert.resolves([7])
-      const dummy = { name: "foo", released_at: new Date("2020-10-12T19:29:51.479Z"), runtime: 200, genre_id: 1 }
+      const dummy = { name: 'foo', released_at: new Date('2020-10-12T19:29:51.479Z'), runtime: 200, genre_id: 1 }
 
       const id = await create(dummy.name, dummy.released_at, dummy.runtime, dummy.genre_id)
-      expect(id).to.equal(7);
-      expect(knex_into.firstCall.firstArg).to.equal(`movie`);
-      expect(knex_insert.firstCall.firstArg).to.equal({synopsis: undefined, ...dummy});
+      expect(id).to.equal(7)
+      expect(knex_into.firstCall.firstArg).to.equal('movie')
+      expect(knex_insert.firstCall.firstArg).to.equal({synopsis: undefined, ...dummy})
     })
 
   })
@@ -40,19 +40,26 @@ describe('lib', () => describe('genre', () => {
       const knex_from = sandbox.stub(knex, 'from')
       knex_from.returnsThis()
       const knex_select = sandbox.stub(knex, 'select')
-      const dummy = [{
+
+      knex_select.resolves([{
         id: 123,
-        name: "foo",
-        released_at: new Date("2020-10-12T19:29:51.479Z"),
+        name: 'foo',
+        released_at: new Date('2020-10-12T19:29:51.479Z'),
         runtime: 32,
-        synopsis: undefined,
-      }];
+        synopsis: 'lorem',
+        genre_id: 1
+      }])
 
-      knex_select.resolves(dummy)
-
-      const data = await list();
-      expect(data).to.equal(dummy as any);
-      expect(knex_from.firstCall.firstArg).to.equal(`movie`);
+      const data = await list()
+      expect(data).to.equal([{
+        id: 123,
+        name: 'foo',
+        released_at: new Date('2020-10-12T19:29:51.479Z'),
+        runtime: 32,
+        synopsis: 'lorem',
+        genre_id: 1
+      }])
+      expect(knex_from.firstCall.firstArg).to.equal('movie')
     })
 
   })
@@ -63,20 +70,20 @@ describe('lib', () => describe('genre', () => {
       const knex_from = sandbox.stub(knex, 'from').returnsThis()
       const knex_where = sandbox.stub(knex, 'where').returnsThis()
       sandbox.stub(knex, 'delete').resolves(1)
-      const found = await remove(1);
+      const found = await remove(1)
       expect(knex_where.firstCall.firstArg).to.equal({ id: 1 })
-      expect(knex_from.firstCall.firstArg).to.equal("movie")
-      expect(found).to.equal(true);
+      expect(knex_from.firstCall.firstArg).to.equal('movie')
+      expect(found).to.equal(true)
     })
 
     it('should indicate wether the value was in database', async () => {
       const knex_from = sandbox.stub(knex, 'from').returnsThis()
       const knex_where = sandbox.stub(knex, 'where').returnsThis()
       sandbox.stub(knex, 'delete').resolves(0)
-      const found = await remove(2);
+      const found = await remove(2)
       expect(knex_where.firstCall.firstArg).to.equal({ id: 2 })
-      expect(knex_from.firstCall.firstArg).to.equal("movie")
-      expect(found).to.equal(false);
+      expect(knex_from.firstCall.firstArg).to.equal('movie')
+      expect(found).to.equal(false)
     })
 
   })
@@ -88,17 +95,17 @@ describe('lib', () => describe('genre', () => {
       const knex_where = sandbox.stub(knex, 'where').returnsThis()
       const knex_update = sandbox.stub(knex, 'update').resolves(1)
       const dummy = {
-        name: "movie",
-        synopsis: "syn",
-        released_at: new Date("2020-10-12T19:29:51.479Z"),
+        name: 'movie',
+        synopsis: 'syn',
+        released_at: new Date('2020-10-12T19:29:51.479Z'),
         runtime: 88,
         genre_id: 1,
       }
-      const found = await update(123, dummy.name, dummy.released_at, dummy.runtime, dummy.genre_id, dummy.synopsis);
+      const found = await update(123, dummy.name, dummy.released_at, dummy.runtime, dummy.genre_id, dummy.synopsis)
       expect(knex_update.firstCall.firstArg).to.equal(dummy)
       expect(knex_where.firstCall.firstArg).to.equal({ id: 123 })
-      expect(knex_from.firstCall.firstArg).to.equal("movie")
-      expect(found).to.equal(true);
+      expect(knex_from.firstCall.firstArg).to.equal('movie')
+      expect(found).to.equal(true)
     })
 
     it('should indicate wether the value was found to be updated', async () => {
@@ -106,17 +113,17 @@ describe('lib', () => describe('genre', () => {
       const knex_where = sandbox.stub(knex, 'where').returnsThis()
       const knex_update = sandbox.stub(knex, 'update').resolves(0)
       const dummy = {
-        name: "movie",
-        synopsis: "syn",
-        released_at: new Date("2020-10-12T19:29:51.479Z"),
+        name: 'movie',
+        synopsis: 'syn',
+        released_at: new Date('2020-10-12T19:29:51.479Z'),
         runtime: 88,
         genre_id: 1,
       }
-      const found = await update(123, dummy.name, dummy.released_at, dummy.runtime, dummy.genre_id, dummy.synopsis);
+      const found = await update(123, dummy.name, dummy.released_at, dummy.runtime, dummy.genre_id, dummy.synopsis)
       expect(knex_update.firstCall.firstArg).to.equal(dummy)
       expect(knex_where.firstCall.firstArg).to.equal({ id: 123 })
-      expect(knex_from.firstCall.firstArg).to.equal("movie")
-      expect(found).to.equal(false);
+      expect(knex_from.firstCall.firstArg).to.equal('movie')
+      expect(found).to.equal(false)
     })
 
   })
@@ -126,9 +133,9 @@ describe('lib', () => describe('genre', () => {
     it('returns one row from table `movie`, by `id`', async () => {
       const dummy = {
         id: 123,
-        name: "movie",
-        synopsis: "syn",
-        released_at: new Date("2020-10-12T19:29:51.479Z"),
+        name: 'movie',
+        synopsis: 'syn',
+        released_at: new Date('2020-10-12T19:29:51.479Z'),
         runtime: 88,
         genre_id: 1,
       }
@@ -137,8 +144,8 @@ describe('lib', () => describe('genre', () => {
       sandbox.stub(knex, 'first').resolves(dummy)
       const movie = await find(123)
       expect(knex_where.firstCall.firstArg).to.equal({ id: 123 })
-      expect(knex_from.firstCall.firstArg).to.equal("movie")
-      expect(movie).to.equal(dummy as any);
+      expect(knex_from.firstCall.firstArg).to.equal('movie')
+      expect(movie).to.equal(dummy)
     })
 
   })
@@ -153,7 +160,7 @@ describe('lib', () => describe('genre', () => {
       sandbox.stub(knex, 'into').returnsThis()
       const knex_insert = sandbox.stub(knex, 'insert').resolves()
       await addToTheCast(1, [2,3,4])
-      
+
       expect(knex_insert.args[0]).to.equal([ { movie_id: 1, actor_id: 2 } ]) // first call
       expect(knex_insert.args[1]).to.equal([ { movie_id: 1, actor_id: 3 } ]) // second call
       expect(knex_insert.args[2]).to.equal([ { movie_id: 1, actor_id: 4 } ]) // third call

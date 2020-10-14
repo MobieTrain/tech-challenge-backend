@@ -23,11 +23,11 @@ const validateParamsId: RouteOptionsValidate = {
 }
 
 interface PayloadMovies {
-  name: string;
-  synopsis?: string;
-  released_at: Date;
-  runtime: number;
-  genre_id: number;
+  name: string
+  synopsis?: string
+  released_at: Date
+  runtime: number
+  genre_id: number
 }
 
 const validatePayloadMovie: RouteOptionsResponseSchema = {
@@ -72,9 +72,9 @@ async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise
 }
 
 async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const payload: PayloadMovies = req.payload as PayloadMovies;
-  const { name, released_at, runtime, genre_id } = payload;
-  const synopsis = !!payload.synopsis ? payload.synopsis : undefined;
+  const payload: PayloadMovies = req.payload as PayloadMovies
+  const { name, released_at, runtime, genre_id } = payload
+  const synopsis = payload.synopsis ? payload.synopsis : undefined
 
   try {
     const id = await movies.create(name, released_at, runtime, genre_id, synopsis)
@@ -86,19 +86,19 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
   }
   catch (er: unknown) {
     if(isHasCode(er) && er.code.includes('ER_NO_REFERENCED_ROW')) {
-      return Boom.badRequest(`related genre does not exists`)
+      return Boom.badRequest('related genre does not exists')
     } else {
-      throw er;
+      throw er
     }
   }
 }
 
 async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const params = req.params as ParamsId;
-  const { id } = params;
-  const payload: PayloadMovies = req.payload as PayloadMovies;
-  const { name, released_at, runtime, genre_id } = payload;
-  const synopsis = !!payload.synopsis ? payload.synopsis : undefined;
+  const params = req.params as ParamsId
+  const { id } = params
+  const payload: PayloadMovies = req.payload as PayloadMovies
+  const { name, released_at, runtime, genre_id } = payload
+  const synopsis = payload.synopsis ? payload.synopsis : undefined
 
   try {
     if (await movies.update(
@@ -111,9 +111,9 @@ async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Life
   }
   catch(er: unknown){
     if(isHasCode(er) && er.code.includes('ER_NO_REFERENCED_ROW')) {
-      return Boom.badRequest(`related genre does not exists`)
+      return Boom.badRequest('related genre does not exists')
     } else {
-      throw er;
+      throw er
     }
   }
 }
@@ -137,9 +137,9 @@ async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<L
   }
   catch(er: unknown){
     if(isHasCode(er) && er.code.includes('ER_ROW_IS_REFERENCED')) {
-      return Boom.badRequest(`movie has related actors`)
+      return Boom.badRequest('movie has related actors')
     } else {
-      throw er;
+      throw er
     }
   }
 }

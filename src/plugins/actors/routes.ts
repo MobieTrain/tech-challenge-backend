@@ -24,9 +24,9 @@ const validateParamsId: RouteOptionsValidate = {
 }
 
 interface PayloadActor {
-  name: string;
-  born_at: Date;
-  bio?: string;
+  name: string
+  born_at: Date
+  bio?: string
 }
 
 const validatePayloadActor: RouteOptionsResponseSchema = {
@@ -78,11 +78,11 @@ async function getAll(_req: Request, _h: ResponseToolkit, _err?: Error): Promise
 }
 
 async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const payload: PayloadActor = req.payload as PayloadActor;
-  const { name, born_at } = payload;
-  const bio = !!payload.bio ? payload.bio : undefined;
+  const payload: PayloadActor = req.payload as PayloadActor
+  const { name, born_at } = payload
+  const bio = payload.bio ? payload.bio : undefined
 
-  const id = await actors.create(name, born_at, bio);
+  const id = await actors.create(name, born_at, bio)
   const result = {
     id,
     path: `${req.route.path}/${id}`
@@ -91,11 +91,11 @@ async function post(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lif
 }
 
 async function put(req: Request, h: ResponseToolkit, _err?: Error): Promise<Lifecycle.ReturnValue> {
-  const params = req.params as ParamsId;
-  const { id } = params;
-  const payload: PayloadActor = req.payload as PayloadActor;
-  const { name, born_at } = payload;
-  const bio = !!payload.bio ? payload.bio : undefined;
+  const params = req.params as ParamsId
+  const { id } = params
+  const payload: PayloadActor = req.payload as PayloadActor
+  const { name, born_at } = payload
+  const bio = payload.bio ? payload.bio : undefined
 
   if (await actors.update(
     id, name, born_at, bio,
@@ -117,7 +117,7 @@ async function getMovies(req: Request, h: ResponseToolkit, _err?: Error): Promis
   const { id } = (req.params as ParamsId)
   const actor = await actors.find(id)
 
-  if (!!actor) {
+  if (actor) {
     const movies = await actors.listMovieAppearances(actor.id)
     return h.response({ ...actor, movies })
   } else {
@@ -129,8 +129,8 @@ async function getFavoriteGenre(req: Request, h: ResponseToolkit, _err?: Error):
   const { id } = (req.params as ParamsId)
   const actor = await actors.find(id)
 
-  if (!!actor) {
-    const genre = await actors.findFavoriteGenre(actor.id) || ""
+  if (actor) {
+    const genre = await actors.findFavoriteGenre(actor.id) || ''
     return h.response({ ...actor, genre })
   } else {
     return Boom.notFound()
@@ -149,9 +149,9 @@ async function remove(req: Request, h: ResponseToolkit, _err?: Error): Promise<L
   }
   catch (er: unknown) {
     if (isHasCode(er) && er.code.includes('ER_ROW_IS_REFERENCED')) {
-      return Boom.badRequest(`actor has related movies`)
+      return Boom.badRequest('actor has related movies')
     } else {
-      throw er;
+      throw er
     }
   }
 }

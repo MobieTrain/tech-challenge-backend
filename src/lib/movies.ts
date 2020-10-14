@@ -1,15 +1,15 @@
 import { knex } from '../util/knex'
 
-export const MOVIE_TABLE = "movie";
-export const MOVIE_ACTOR_TABLE = "movie_actor";
+export const MOVIE_TABLE = 'movie'
+export const MOVIE_ACTOR_TABLE = 'movie_actor'
 
 export interface Movie {
-  id: number;
-  name: string;
-  synopsis: string;
-  released_at: Date;
-  runtime: number;
-  genre_id: number;
+  id: number
+  name: string
+  synopsis: string
+  released_at: Date
+  runtime: number
+  genre_id: number
 }
 
 /** @returns the ID that was created */
@@ -65,29 +65,29 @@ export async function addToTheCast(
   id: number,
   actorsIds: number[],
 ): Promise<void> {
-  const actorsNotInCast = [];
+  const actorsNotInCast = []
   for (const actorId of actorsIds) {
     if (!await alreadyInTheCast(id, actorId)) {
-      actorsNotInCast.push(actorId);
+      actorsNotInCast.push(actorId)
     }
   }
-  await Promise.all(actorsNotInCast.map(actorId => knex.into(MOVIE_ACTOR_TABLE).insert({ 
+  await Promise.all(actorsNotInCast.map(actorId => knex.into(MOVIE_ACTOR_TABLE).insert({
     movie_id: id,
     actor_id: actorId,
-  })));
+  })))
 }
 
 async function alreadyInTheCast(
   id: number,
   actorId: number,
 ): Promise<boolean> {
-  const relations = (await knex.count("movie_id").from(MOVIE_ACTOR_TABLE).where({ 
+  const relations = (await knex.count('movie_id').from(MOVIE_ACTOR_TABLE).where({
     movie_id: id,
     actor_id: actorId,
-  }).first());
+  }).first())
   if (!!relations && relations['count(`movie_id`)'] > 0) {
-    return true;
+    return true
   } else {
-    return false;
+    return false
   }
 }

@@ -60,7 +60,7 @@ describe('plugin', () => describe('movies', () => {
 
     it('returns all movies', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/movies" }
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/movies' }
       const movies = [{
         name: 'happy movie',
         synopsis: 'lorem ipsum',
@@ -81,7 +81,7 @@ describe('plugin', () => describe('movies', () => {
 
     it('validates payload is not empty', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/movies" }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/movies' }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
@@ -95,12 +95,12 @@ describe('plugin', () => describe('movies', () => {
         runtime: 190,
         genre_id: 1,
       }
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/movies", payload }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/movies', payload }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
     })
-  
+
     it('returns HTTP 201, with the `id` and `path` to the row created', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
       const payload = {
@@ -110,7 +110,7 @@ describe('plugin', () => describe('movies', () => {
         runtime: 190,
         genre_id: 1,
       }
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/movies", payload }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/movies', payload }
       const movie = 1
       context.stub.lib_create.resolves(movie)
 
@@ -138,8 +138,8 @@ describe('plugin', () => describe('movies', () => {
         released_at: new Date(),
         runtime: 190,
         genre_id: 1,
-      };
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/movies", payload }
+      }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/movies', payload }
       const movie = 1
       context.stub.lib_create.resolves(movie)
 
@@ -169,7 +169,7 @@ describe('plugin', () => describe('movies', () => {
 
     it('validates :id is numeric', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method, url: `/movies/abc` }
+      const opts: Hapi.ServerInjectOptions = { method, url: '/movies/abc' }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
@@ -230,9 +230,8 @@ describe('plugin', () => describe('movies', () => {
         released_at: new Date(),
         runtime: 190,
         genre_id: 1,
-      };
+      }
       const opts: Hapi.ServerInjectOptions = { method, url, payload }
-      const movie = 1
       context.stub.lib_update.resolves(1)
 
       const response = await context.server.inject(opts)
@@ -258,7 +257,7 @@ describe('plugin', () => describe('movies', () => {
         runtime: 190,
         genre_id: 1,
         synopsis: 'hello world',
-      };
+      }
       const opts: Hapi.ServerInjectOptions = { method, url, payload }
       context.stub.lib_update.resolves(0)
 
@@ -274,7 +273,7 @@ describe('plugin', () => describe('movies', () => {
         runtime: 190,
         genre_id: 1,
         synopsis: 'hello world',
-      };
+      }
       const opts: Hapi.ServerInjectOptions = { method, url, payload }
       const anyResult = 1
       context.stub.lib_update.resolves(anyResult)
@@ -302,7 +301,7 @@ describe('plugin', () => describe('movies', () => {
 
     it('validates :id is numeric', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method, url: `/movies/abcd` }
+      const opts: Hapi.ServerInjectOptions = { method, url: '/movies/abcd' }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)

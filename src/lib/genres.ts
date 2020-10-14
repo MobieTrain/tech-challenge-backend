@@ -1,6 +1,6 @@
 import { knex } from '../util/knex'
 
-export const GENRE_TABLE = "genre";
+export const GENRE_TABLE = 'genre'
 
 export interface Genre {
   id: number

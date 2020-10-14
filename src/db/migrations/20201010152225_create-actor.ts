@@ -27,7 +27,7 @@ export async function up(knex: Knex): Promise<void> {
         REFERENCES actor (id)
         ON DELETE NO ACTION
         ON UPDATE NO ACTION
-    ) ENGINE = InnoDB;`);
+    ) ENGINE = InnoDB;`)
 }
 
 

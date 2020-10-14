@@ -66,7 +66,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns all actors', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/actors" }
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/actors' }
       const actors = [{ id: 1, name: 'actor', bio: 'lorem', born_at: new Date() }]
       context.stub.lib_list.resolves(actors)
 
@@ -81,7 +81,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('validates payload is not empty', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/actors" }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/actors' }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
@@ -90,7 +90,7 @@ describe('plugin', () => describe('actor', () => {
     it('validates mandatory `born_at` property', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
       const payload = { name: 'foo' }
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/actors", payload }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/actors', payload }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
@@ -99,7 +99,7 @@ describe('plugin', () => describe('actor', () => {
     it('validates mandatory `name` property', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
       const payload = { born_at: 'foo' }
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/actors", payload }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/actors', payload }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
@@ -108,7 +108,7 @@ describe('plugin', () => describe('actor', () => {
     it('returns HTTP 201, with the `id` and `path` to the row created', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
       const payload = { name: 'actor', bio: 'lorem', born_at: new Date() }
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/actors", payload }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/actors', payload }
       const actor = 1
       context.stub.lib_create.resolves(actor)
 
@@ -125,7 +125,7 @@ describe('plugin', () => describe('actor', () => {
     it('should create without bio (optional)', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
       const payload = { name: 'actor', born_at: new Date() }
-      const opts: Hapi.ServerInjectOptions = { method: "POST", url: "/actors", payload }
+      const opts: Hapi.ServerInjectOptions = { method: 'POST', url: '/actors', payload }
       const actor = 1
       context.stub.lib_create.resolves(actor)
 
@@ -260,7 +260,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('validates :id is numeric', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method, url: `/actors/abcd` }
+      const opts: Hapi.ServerInjectOptions = { method, url: '/actors/abcd' }
 
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(400)
@@ -294,7 +294,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns HTTP 404 when :id is not found', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/actors/1/movies" }
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/actors/1/movies' }
       context.stub.lib_find.resolves(null)
 
       const response = await context.server.inject(opts)
@@ -303,14 +303,14 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns actors movie appearances', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/actors/2/movies" }
-      const anyDate = new Date();
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/actors/2/movies' }
+      const anyDate = new Date()
       const actor = { id: 2, name: 'actor', born_at: anyDate }
       context.stub.lib_find.resolves(actor)
       context.stub.lib_listMovieAppearances.resolves([{
         id: 2,
-        name: "Rock and roll 222",
-        synopsis: "a synopsys simple as it is 222",
+        name: 'Rock and roll 222',
+        synopsis: 'a synopsys simple as it is 222',
         released_at: anyDate,
         runtime: 22,
         genre_id: 2
@@ -342,7 +342,7 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns HTTP 404 when :id is not found', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/actors/2/movies/genres/favorite" }
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/actors/2/movies/genres/favorite' }
       context.stub.lib_find.resolves(null)
 
       const response = await context.server.inject(opts)
@@ -351,11 +351,11 @@ describe('plugin', () => describe('actor', () => {
 
     it('returns actors favorite genre', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/actors/2/movies/genres/favorite" }
-      const anyDate = new Date();
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/actors/2/movies/genres/favorite' }
+      const anyDate = new Date()
       const actor = { id: 2, name: 'actor', born_at: anyDate }
       context.stub.lib_find.resolves(actor)
-      context.stub.lib_findFavoriteGenre.resolves("Horror")
+      context.stub.lib_findFavoriteGenre.resolves('Horror')
       const response = await context.server.inject(opts)
       expect(response.statusCode).equals(200)
       sinon.assert.calledOnceWithExactly(context.stub.lib_findFavoriteGenre, 2)
@@ -364,14 +364,14 @@ describe('plugin', () => describe('actor', () => {
         id: 2,
         name: 'actor',
         born_at: anyDate,
-        genre: "Horror",
+        genre: 'Horror',
       })
     })
 
     it('returns empty string if actors has not favorite genre', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
-      const opts: Hapi.ServerInjectOptions = { method: "GET", url: "/actors/2/movies/genres/favorite" }
-      const anyDate = new Date();
+      const opts: Hapi.ServerInjectOptions = { method: 'GET', url: '/actors/2/movies/genres/favorite' }
+      const anyDate = new Date()
       const actor = { id: 2, name: 'actor', born_at: anyDate }
       context.stub.lib_find.resolves(actor)
       context.stub.lib_findFavoriteGenre.resolves(null)
@@ -383,7 +383,7 @@ describe('plugin', () => describe('actor', () => {
         id: 2,
         name: 'actor',
         born_at: anyDate,
-        genre: "",
+        genre: '',
       })
     })
 
