@@ -159,11 +159,15 @@ describe('lib', () => describe('genre', () => {
       sandbox.stub(knex, 'first').resolves({ 'count(`movie_id`)': 0 })
       sandbox.stub(knex, 'into').returnsThis()
       const knex_insert = sandbox.stub(knex, 'insert').resolves()
-      await addToTheCast(1, [2,3,4])
+      await addToTheCast(1, [
+        { actor_id: 2, character_name: 'tony stark'},
+        { actor_id: 3, character_name: 'captain america'},
+        { actor_id: 4, character_name: 'hulk'},
+      ])
 
-      expect(knex_insert.args[0]).to.equal([ { movie_id: 1, actor_id: 2 } ]) // first call
-      expect(knex_insert.args[1]).to.equal([ { movie_id: 1, actor_id: 3 } ]) // second call
-      expect(knex_insert.args[2]).to.equal([ { movie_id: 1, actor_id: 4 } ]) // third call
+      expect(knex_insert.args[0]).to.equal([ { movie_id: 1, actor_id: 2, character_name: 'tony stark' } ]) // first call
+      expect(knex_insert.args[1]).to.equal([ { movie_id: 1, actor_id: 3, character_name: 'captain america' } ]) // second call
+      expect(knex_insert.args[2]).to.equal([ { movie_id: 1, actor_id: 4, character_name: 'hulk' } ]) // third call
     })
 
     it('should not add actors to the movie cast if actor is already in the cast', async () => {
@@ -173,7 +177,11 @@ describe('lib', () => describe('genre', () => {
       sandbox.stub(knex, 'first').resolves({ 'count(`movie_id`)': 1 })
       sandbox.stub(knex, 'into').returnsThis()
       const knex_insert = sandbox.stub(knex, 'insert').resolves()
-      await addToTheCast(1, [2,3,4])
+      await addToTheCast(1, [
+        { actor_id: 2, character_name: 'tony stark'},
+        { actor_id: 3, character_name: 'captain america'},
+        { actor_id: 4, character_name: 'hulk'},
+      ])
 
       expect(knex_insert.notCalled).to.equal(true)
     })
