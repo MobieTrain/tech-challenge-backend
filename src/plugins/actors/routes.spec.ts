@@ -272,8 +272,7 @@ describe('plugin', () => describe('actor', () => {
       context.stub.lib_remove.resolves(0)
 
       const response = await context.server.inject(opts)
-      expect(response.statusCode).equals(400)
-
+      expect(response.statusCode).equals(404)
     })
 
     it('returns bad request with proper message if actor has movie appearances', async ({ context }: Flags) => {
