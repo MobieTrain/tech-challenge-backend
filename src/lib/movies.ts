@@ -64,8 +64,8 @@ export async function update(
 export async function addToTheCast(
   id: number,
   cast: Array<{
-    actor_id: number,
-    character_name: string,
+    actor_id: number
+    character_name: string
   }>,
 ): Promise<void> {
   const actorsNotInCast = []

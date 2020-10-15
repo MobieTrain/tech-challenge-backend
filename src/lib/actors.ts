@@ -12,7 +12,7 @@ export interface Actor {
 }
 
 export interface MovieAppearance extends Movie {
-  character_name: string;
+  character_name: string
 }
 
 export async function create(
@@ -34,7 +34,7 @@ export function list(): Promise<Actor[]> {
 
 export function listMovieAppearances(id: number): Promise<MovieAppearance[]> {
   return knex
-    .select(MOVIE_TABLE + '.*', MOVIE_ACTOR_TABLE + ".character_name")
+    .select(MOVIE_TABLE + '.*', MOVIE_ACTOR_TABLE + '.character_name')
     .from(ACTOR_TABLE)
     .join(MOVIE_ACTOR_TABLE, ACTOR_TABLE + '.id', '=', MOVIE_ACTOR_TABLE + '.actor_id')
     .join(MOVIE_TABLE, MOVIE_TABLE + '.id', '=', MOVIE_ACTOR_TABLE + '.movie_id')

@@ -73,7 +73,7 @@ describe('lib', () => describe('genre', () => {
         released_at: new Date('2020-10-12T19:29:51.479Z'),
         runtime: 88,
         genre_id: 1,
-        character_name: "tony stark"
+        character_name: 'tony stark'
       }]
       knex_where.resolves(dummy)
 

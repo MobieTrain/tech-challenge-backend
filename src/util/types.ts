@@ -1,4 +1,4 @@
-import { ResponseObject } from "@hapi/hapi"
+import { ResponseObject } from '@hapi/hapi'
 
 export interface HasCode {
   code: string

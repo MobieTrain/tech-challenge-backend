@@ -11,11 +11,11 @@ const init = async (port = '8080') => {
   await server.start()
   server.events.on('response', function (request) {
     if (isResponseObject(request.response)) {
-      console.log(request.info.remoteAddress + ': ' + request.method.toUpperCase() + ' ' + request.path + ' --> ' + request.response.statusCode);
+      console.log(request.info.remoteAddress + ': ' + request.method.toUpperCase() + ' ' + request.path + ' --> ' + request.response.statusCode.toString())
     } else {
-      console.log(request.info.remoteAddress + ': ' + request.method.toUpperCase() + ' ' + request.path);
+      console.log(request.info.remoteAddress + ': ' + request.method.toUpperCase() + ' ' + request.path)
     }
-  });
+  })
 
   console.log('Server running on %s', server.info.uri)
 }

@@ -319,7 +319,7 @@ describe('plugin', () => describe('movies', () => {
     it('returns bad request with proper movies have related actors', async ({ context }: Flags) => {
       if (!isContext(context)) throw TypeError()
       const opts: Hapi.ServerInjectOptions = { method, url }
-      context.stub.lib_remove.rejects({ code: "ER_ROW_IS_REFERENCED_2"})
+      context.stub.lib_remove.rejects({ code: 'ER_ROW_IS_REFERENCED_2'})
 
       const response = await context.server.inject(opts)
       expect(response.result).to.equal({
