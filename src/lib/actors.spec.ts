@@ -73,11 +73,13 @@ describe('lib', () => describe('genre', () => {
         released_at: new Date('2020-10-12T19:29:51.479Z'),
         runtime: 88,
         genre_id: 1,
+        character_name: "tony stark"
       }]
       knex_where.resolves(dummy)
 
       const movies = await listMovieAppearances(1)
       expect(knex_select.firstCall.firstArg).to.equal('movie.*')
+      expect(knex_select.firstCall.args).to.equal([ 'movie.*', 'movie_actor.character_name' ])
       expect(knex_from.firstCall.firstArg).to.equal('actor')
       expect(knex_join.args[0]).to.equal(['movie_actor', 'actor.id', '=', 'movie_actor.actor_id'])
       expect(knex_join.args[1]).to.equal(['movie', 'movie.id', '=', 'movie_actor.movie_id'])
