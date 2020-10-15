@@ -19,6 +19,9 @@ const knexConfig: Config = {
   },
   migrations: {
     directory: './db/migrations'
+  },
+  seeds: {
+    directory: './db/seeds'
   }
 }
 
